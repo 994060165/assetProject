@@ -1,20 +1,30 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import main from '@/views/main'
-import dashboard from '@/views/dashboard'
-import assetSearch from '@/views/asset-search/index'
-import assetCheck from '@/views/asset-check/index'
-import assetPosition from '@/views/asset-position/index'
-import assetBind from '@/views/asset-bind/index'
-import assetBindCheck from '@/views/asset-check/assetBindCheck'
+// import sysRoutes from '@/system/router/index'
+const login = r => require.ensure([], () => r(require('@/system/modules/login/login')), 'login')
+const main = r => require.ensure([], () => r(require('@/views/main')), 'main')
+const dashboard = r => require.ensure([], () => r(require('@/views/dashboard')), 'dashboard')
+const assetSearch = r => require.ensure([], () => r(require('@/views/asset-search/index')), 'assetSearch')
+const assetCheck = r => require.ensure([], () => r(require('@/views/asset-check/index')), 'assetCheck')
+const assetPosition = r => require.ensure([], () => r(require('@/views/asset-position/index')), 'assetPosition')
+const assetBind = r => require.ensure([], () => r(require('@/views/asset-bind/index')), 'assetBind')
+const assetBindCheck = r => require.ensure([], () => r(require('@/views/asset-check/assetBindCheck')), 'assetBindCheck')
 
 Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes: [
     {
+      path: '',
+      redirect: '/login'
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: login
+    },
+    {
       path: '/',
-      redirect: '/dashboard',
       name: 'main',
       component: main,
       children: [

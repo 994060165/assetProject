@@ -53,7 +53,7 @@ export default {
   height: $global-navbar-height;
   background: #324057;
   min-width: 100%;
-  z-index: 2;
+  z-index: 9999;
   box-shadow: 0 2px 3px hsla(0,0%,7%,.1),0 0 0 1px hsla(0,0%,7%,.1);
   .el-dropdown {
     color: #fff;
