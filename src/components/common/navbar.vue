@@ -56,7 +56,7 @@ export default {
   background: -moz-linear-gradient(#004bc1, #0858d8); /* Firefox 3.6 - 15 */
   background: linear-gradient(#004bc1, #0858d8); /* 标准的语法 */
   min-width: 100%;
-  z-index: 2;
+  z-index: 9999;
   box-shadow: 0 2px 3px hsla(0,0%,7%,.1),0 0 0 1px hsla(0,0%,7%,.1);
   .el-dropdown {
     color: #fff;

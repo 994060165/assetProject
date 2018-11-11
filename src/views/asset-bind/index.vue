@@ -143,11 +143,11 @@ export default {
       bindOption: [
         {
           label: '已绑定',
-          value: '1'
+          value: '已绑定'
         },
         {
           label: '未绑定',
-          value: '0'
+          value: '未绑定'
         }
       ]
     }

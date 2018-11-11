@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 import moment from 'moment'
+import Request from './request'
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 import {
@@ -18,6 +19,7 @@ import {
 Vue.config.productionTip = false
 
 Vue.use(Element)
+Vue.prototype.$request = Request
 
 sync(store, router)
 Vue.filter('moment', function (value, formatString) {

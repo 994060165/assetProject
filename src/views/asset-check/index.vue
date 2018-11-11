@@ -6,9 +6,9 @@
     <template slot="action">
       <el-select v-model="finished" placeholder="请选择任务进度" @change="handleChange">
         <el-option label="全部" value=""></el-option>
-        <el-option label="未盘点" value="0"></el-option>
-        <el-option label="盘点中" value="1"></el-option>
-        <el-option label="已完成" value="2"></el-option>
+        <el-option label="未盘点" value="未盘点"></el-option>
+        <el-option label="盘点中" value="盘点中"></el-option>
+        <el-option label="已完成" value="已完成"></el-option>
       </el-select>
       <el-input 
         class="w-400"
