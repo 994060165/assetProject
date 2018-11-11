@@ -3,7 +3,7 @@
   <navbar></navbar>
   <sidebar></sidebar>
   <div class="main__wrapper">
-    <h3>{{title}}</h3>
+    <div class="title"><h3>{{title}}</h3></div>
     <!-- <el-breadcrumb separator="/">
       <el-breadcrumb-item>首页</el-breadcrumb-item>
       <el-breadcrumb-item>{{title}}</el-breadcrumb-item>
@@ -68,18 +68,25 @@ export default {
   @include e(wrapper) {
     margin-left: $global-sidebar-width;
     padding: $global-gap*2 + $global-navbar-height $global-gap*2 $global-gap*2;
-    > h3 {
-      -webkit-margin-before: 0;
-      -webkit-margin-after: 0;
-      border-left: 4px solid #20a0ff;
-      padding-left: $global-gap;
-      margin-bottom: $global-gap * 2;
+    > .title {
+      background-color: #fff;
+      padding-bottom: $global-gap*1.5;
+      padding-top: $global-gap*1.5;
+      padding-left: $global-gap* 2;
+      h3 {
+            -webkit-margin-before: 0;
+            -webkit-margin-after: 0;
+            border-left: 4px solid #20a0ff;
+            padding-left: $global-gap;
+            
+          }
     }
   }
   @include e(view) {
     background: #fff;
     padding: $global-gap*3;
-    box-shadow: 0 2px 3px hsla(0, 0%, 7%, .1), 0 0 0 1px hsla(0, 0%, 7%, .1);
+    border-top:1px solid #f0f0f0;
+    // box-shadow: 0 2px 3px hsla(0, 0%, 7%, .1), 0 0 0 1px hsla(0, 0%, 7%, .1);
   }
   .el-breadcrumb {
     margin-bottom: $global-gap*2;

@@ -15,6 +15,7 @@ export default {
 @import './assets/styles/common.css';
 body{
   margin: 0;
+  background-color: #eceff4;
 }
 p{
   -webkit-margin-before: .5em;

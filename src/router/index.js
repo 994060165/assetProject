@@ -48,6 +48,7 @@ const router = new VueRouter({
           name: 'asset-position',
           component: assetPosition
         }
+
       ]
     }
   ]

@@ -49,6 +49,16 @@ export default {
     .el-menu {
         border-radius: 0;
         height: 100%;
+        background: #263548;
+        .el-menu-item,.el-menu-item:focus,.el-menu-item:visited,.el-menu-item:active{
+          color:#fff;
+          background: #263548;
+          border-bottom:1px solid #2d435a;
+          i{color: #fff;}
+        }
+        .el-menu-item:hover{
+          background-color: #2d435a;
+        }
     }
 }
 </style>
