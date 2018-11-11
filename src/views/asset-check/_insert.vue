@@ -1,6 +1,6 @@
 <template>
 <div class="asset-check__add">
-  <el-dialog title="新建任务" :visible="insertVisible" :before-close="handleClose" :modal="true" :close-on-press-escape="false" :close-on-click-modal="false" :show-close="false">
+  <el-dialog title="新建任务" class="model" :visible="insertVisible" :before-close="handleClose" :modal="true" :close-on-press-escape="false" :close-on-click-modal="false" :show-close="false">
     <el-form :model="submitForm" :rules="submitRule" ref="submitForm" label-width="100px">
       
       <el-form-item label="任务名称" prop="plan_name">
@@ -19,12 +19,13 @@
           <el-date-picker type="date" placeholder="请选择截止日期" v-model="submitForm.deadline" ></el-date-picker>
         </el-form-item>
       </el-form-item>
-      <el-form-item>
+      <!-- <el-form-item>
         <el-button :loading="loading" type="primary" @click="handleSubmit()">提交任务</el-button>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="handleClose">关 闭</el-button>
+      <el-button  @click="handleClose">关 闭</el-button>
+      <el-button :loading="loading" type="primary" @click="handleSubmit()">提交任务</el-button>
     </span>
   </el-dialog>
 </div>
@@ -219,4 +220,7 @@ export default {
     left: 0;
   }
 }
+.el-dialog__header{background: #f6f6f6;border-bottom: 1px solid #ddd;}
+.el-dialog__footer{border-top:1px solid #ddd;}
+.model .el-form{width:380px;margin: 0 auto;}
 </style>

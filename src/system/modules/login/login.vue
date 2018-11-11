@@ -1,7 +1,7 @@
 <template>
     <div id="login-main">
       <div id="login-top">
-        <h1 style="position: absolute; top: 50px;left: 50px;color: white;">中科院智慧后勤平台资产定位系统</h1>
+        <h1 class="login-logo"></h1>
         <div class="formDiv">
           <div class="styleone-login-line">
             <div class="styleone-login-left">
@@ -184,7 +184,7 @@ img{
     height: 100%;
     position:relative;
     #login-top {
-        background-image: url("../../assets/img/desk/login/logo.jpg");
+        background-image: url("../../assets/img/desk/login/logbg.jpg");
         // background-repeat: no-repeat;
         // background-position: center top;
         // background-size: cover;
@@ -197,6 +197,7 @@ img{
         width: 100%;
         height: 95%;
         position: fixed;
+        .login-logo{background:url("../../assets/img/desk/login/login-logo.png") no-repeat 6% center; height: 100px;}
     }
     #login-bottom{
       text-align: center;
@@ -213,7 +214,7 @@ img{
     .formDiv {
       position: absolute;
       top: 27%;
-      right: 3%;
+      right: 6%;
       width: 355px;
       height: 300px;
       background-color: #fff;
@@ -294,4 +295,5 @@ img{
   padding: 10px;
   margin: 60px 0 0 40px;
 }
+.el-dialog__header{background: #f6f6f6;border-bottom: 1px solid #ddd;height: 18px;}
 </style>
