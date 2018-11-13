@@ -42,14 +42,16 @@ export default {
     max-height: 100vh;
     height: 100%;
     z-index: 1;
-    background: #fff;
+    background: #263548;
     box-shadow: 0 2px 3px hsla(0,0%,7%,.1),0 0 0 1px hsla(0,0%,7%,.1);
     overflow-y: auto;
     overflow-x: hidden;
     .el-menu {
         border-radius: 0;
-        height: 100%;
+        // height: 100%;
+        padding-top: 10px;
         background: #263548;
+        border: none;
         .el-menu-item,.el-menu-item:focus,.el-menu-item:visited,.el-menu-item:active{
           color:#fff;
           background: #263548;

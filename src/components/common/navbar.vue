@@ -51,10 +51,11 @@ export default {
 .main__navbar {
   position: fixed;
   height: $global-navbar-height;
-  background: -webkit-linear-gradient(#004bc1, #0858d8); /* Safari 5.1 - 6.0 */
-  background: -o-linear-gradient(#004bc1, #0858d8); /* Opera 11.1 - 12.0 */
-  background: -moz-linear-gradient(#004bc1, #0858d8); /* Firefox 3.6 - 15 */
-  background: linear-gradient(#004bc1, #0858d8); /* 标准的语法 */
+  // background: -webkit-linear-gradient(#004bc1, #0858d8); /* Safari 5.1 - 6.0 */
+  // background: -o-linear-gradient(#004bc1, #0858d8); /* Opera 11.1 - 12.0 */
+  // background: -moz-linear-gradient(#004bc1, #0858d8); /* Firefox 3.6 - 15 */
+  // background: linear-gradient(#004bc1, #0858d8); /* 标准的语法 */
+  background: #0e9aef;
   min-width: 100%;
   z-index: 9999;
   box-shadow: 0 2px 3px hsla(0,0%,7%,.1),0 0 0 1px hsla(0,0%,7%,.1);
@@ -75,7 +76,7 @@ export default {
     background: url(../../assets/images/logo.png) no-repeat 0 center;
     width:430px;
     height: 65px;
-   margin-left: $global-gap * 2;
+   margin-left: $global-gap * 8;
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
     line-height: $global-navbar-height;

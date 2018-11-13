@@ -221,7 +221,7 @@ export default {
         page: this.assetsPage,
         pagesize: this.assetsPagesize,
         keystr: this.assetkeystr,
-        token: 'b8a09425e44ef38f35a3b816a18d9263'
+        token: JSON.parse(sessionStorage.getItem('token'))
       }
       api.getAssetBase16(params).then(data => {
         this.assetsTotal = data.count
@@ -315,7 +315,7 @@ export default {
     deleteAsset (id) {
       let params = {
         plan_id: this.planId,
-        token: 'b8a09425e44ef38f35a3b816a18d9263',
+        token: JSON.parse(sessionStorage.getItem('token')),
         detail_id: id
       }
       api.deletechecksplanDetail(params).then(data => {

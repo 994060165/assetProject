@@ -1,7 +1,7 @@
 <template>
 <div class="asset-bind">
-  <datagrid ref="datagrid" :server-page="true" :table-data="allAssets"  @handleSearch="handleSearch" @handleSelectionChange="handleSelectionChange">
-    <!-- <template slot="form">
+  <datagrid ref="datagrid" :server-page="true" :table-data="allAssets" :search-form="searchForm" @handleSearch="handleSearch" @handleSelectionChange="handleSelectionChange">
+    <template slot="form">
       <el-row :gutter="16">
         <el-col :span="8">
           <el-form-item label="资产名称">
@@ -51,18 +51,18 @@
           </el-form-item>
         </el-col>
       </el-row>
-    </template> -->
+    </template>
     <template slot="action">
       <!-- <el-button :disabled="disabledButton" type="primary" icon="plus" @click="$refs.bind.asset = multipleSelection">资产绑定</el-button> -->
       <el-input 
-        placeholder="请输入资产名称/品牌/标签号/型号/责任部门/责任人" v-model="keyword" @keyup.enter.native="handleEnter"
+        placeholder="请输入资产名称/品牌/标签号/型号/责任部门/责任人" 
+        icon="search" v-model="keyword" @keyup.enter.native="handleEnter"
         >
         <el-button slot="append" icon="el-icon-search" @click="handleEnter"></el-button>
       </el-input>
-      <el-button type="primary">新增绑定任务</el-button>
     </template>
     <template slot="table">
-      <el-table-column type="index" width="55">序号</el-table-column>
+      <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="name" label="设备名称" width="100"></el-table-column>
       <el-table-column inline-template :context="_self" label="设备信息" width="180">
         <div>
@@ -88,24 +88,36 @@
     </template>
   </datagrid>
   <bind ref="bind"></bind>
+  <detail ref="detail"
+    :visible="visible"
+    @closeDialog="closeDialog"></detail>
 </div>
 </template>
 
 <script>
 import datagrid from '@/components/common/datagrid.vue'
+import detail from '@/components/asset/detail.vue'
 import bind from '@/views/asset-bind/_bind.vue'
 import api from '@/api'
 import moment from 'moment'
+import {
+  mapGetters
+} from 'vuex'
 
 export default {
   computed: {
+    ...mapGetters([
+      'allDeparments',
+      'allPersons'
+    ]),
     disabledButton () {
       return this.multipleSelection.length === 0
     }
   },
   components: {
     datagrid,
-    bind
+    bind,
+    detail
   },
   mounted () {
     this.handleEnter()

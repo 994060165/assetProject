@@ -11,7 +11,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~normalize.css';
 @import './assets/styles/common.css';
 body{
   margin: 0;

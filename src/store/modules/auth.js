@@ -14,7 +14,7 @@ const state = {
       path: '/asset-search'
     },
     {
-      name: '标签绑定',
+      name: '标签打印',
       icon: 'setting',
       path: '/asset-bind'
     },

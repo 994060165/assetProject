@@ -166,15 +166,18 @@ export default {
             plan_memo: this.submitForm.plan_memo,
             plan_name: this.submitForm.plan_name,
             deadline: _deadlineDate,
-            create_person: 'userid'
+            create_person: JSON.parse(sessionStorage.getItem('user')).UserID,
+            token: JSON.parse(JSON.stringify(sessionStorage.getItem('token')))
           }
           api.postCheck(params).then(data => {
             this.loading = false
             if (data.ID === '-1') {
-              this.$message({
-                type: 'error',
-                message: `${data.msg}`
-              })
+              // this.$message({
+              //   type: 'error',
+              //   message: `${data.msg}`
+              // })
+              alert(`${data.msg}`)
+              // this.handleClose()
             } else {
               this.$message({
                 type: 'success',
