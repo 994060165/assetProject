@@ -8,8 +8,10 @@ import store from './store'
 import moment from 'moment'
 import Request from './request'
 import echarts from 'echarts'
+// import { Message } from 'element-ui'
+Vue.prototype.$message = Element.Message
 Vue.prototype.$echarts = echarts
-
+console.log(Element)
 Vue.config.productionTip = false
 
 Vue.use(Element)
