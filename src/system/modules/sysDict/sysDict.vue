@@ -206,7 +206,7 @@ export default {
         pagesize: this.pageSize,
         DataID: this.queryKey
       }
-      this.$request.post(`/commweb/sys/index/getAllData`, params).then(res => {
+      this.$request.post(`/sys/index/getAllData`, params).then(res => {
         this.loading = false
         let data = res.data
         this.totalCount = data.count

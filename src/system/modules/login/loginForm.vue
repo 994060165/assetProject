@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
 <div>
   <el-form ref="form" :model="form" class="loginForm">
     <div class="styleone-tx" v-show="errorMessage">
@@ -60,6 +60,21 @@ export default {
           let userInfo
           for (let user in users) {
             userInfo = users[user]
+          }
+          if (data.data.Roleinfo) {
+            let roleList = data.data.Roleinfo.data
+            let roleobj = {}
+            roleList.forEach(value => {
+              roleobj[value.RoleID] = value
+            })
+            let roleArr = []
+            for (let item in roleobj) {
+              roleArr.push(roleobj[item])
+            }
+            window.sessionStorage.setItem('roleList', JSON.stringify(roleArr))
+          }
+          if (data.data.Orginfo) {
+            window.sessionStorage.setItem('org', JSON.stringify(data.data.Orginfo[0]))
           }
           window.sessionStorage.setItem('token', data.token)
           window.sessionStorage.setItem('menu', JSON.stringify(data.data.treelist))
@@ -214,5 +229,6 @@ img{
     font-size: 12px;
   }
 }
+
 }
 </style>

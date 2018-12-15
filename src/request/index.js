@@ -1,9 +1,9 @@
 // 接口地址
 import axios from 'axios'
-// import { gConfig } from '../../static/data/config'
+import { type } from '../../static/data'
 // axios 配置
 axios.defaults.timeout = 120 * 1000
-axios.defaults.baseURL = '/asset'
+axios.defaults.baseURL = `/${type}`
 // axios.defaults.baseURL = 'http://159.226.194.34/'
 // http request 拦截器
 axios.interceptors.request.use(

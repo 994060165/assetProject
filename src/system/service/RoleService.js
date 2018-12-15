@@ -1,4 +1,4 @@
-import axios from '../../../../../service/http'
+import axios from '@/request/index'
 
 let roleUrl = '/portal/role'
 export class LocalRoleAPI {

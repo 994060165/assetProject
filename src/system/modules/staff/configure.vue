@@ -116,7 +116,7 @@
           page: 1
         }
         // 先获取有什么角色
-        this.$request.post(`/commweb/sys/index/getRolesByUserID`, params).then(res => {
+        this.$request.post(`/sys/index/getRolesByUserID`, params).then(res => {
           let userRoleData = res.data.data
           // 再获取所有角色内容
           let params1 = {
@@ -124,7 +124,7 @@
             pagesize: 100,
             RoleID: ''
           }
-          this.$request.post(`/commweb/sys/index/getRolesTree`, params1).then(res => {
+          this.$request.post(`/sys/index/getRolesTree`, params1).then(res => {
             let allRoleData = res.data.data
             allRoleData.forEach(value => {
               value.qyState = false
@@ -170,7 +170,7 @@
             UserID: this.$route.params.UserID,
             RoleID: RoleIDs
           }
-          this.$request.post('/commweb/sys/index/setUserRoles', params).then(res => {
+          this.$request.post('/sys/index/setUserRoles', params).then(res => {
             let data = res.data
             if (data.ID === '0') {
               this.$message({

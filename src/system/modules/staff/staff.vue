@@ -224,7 +224,7 @@
           page: this.page,
           pagesize: this.pageSize
         }
-        this.$request.post('/commweb/sys/index/getAlluser', params).then(res => {
+        this.$request.post('/sys/index/getAlluser', params).then(res => {
           let data = res.data
           if (res.data) {
             this.tableData = data.data

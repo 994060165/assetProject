@@ -11,7 +11,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import './assets/styles/common.css';
 body{
   margin: 0;
   background-color: #eceff4;

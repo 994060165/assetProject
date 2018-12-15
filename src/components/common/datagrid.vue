@@ -49,7 +49,7 @@ export default {
       if (this.serverPage) {
         this.table.data = newValue
       } else {
-        if (this.paging) {
+        if (newValue.length > this.page.pageSize) {
           this.table.data = newValue.slice(0, this.page.pageSize)
         } else {
           this.table.data = newValue
@@ -69,7 +69,7 @@ export default {
       page: {
         total: 0,
         currentPage: 1,
-        pageSize: 15,
+        pageSize: 10,
         layout: 'total, ->, prev, pager, next'
       }
     }

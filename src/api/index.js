@@ -93,7 +93,7 @@ export default {
    * @param  {[finished]} payload [是否已完成]
    */
   getchecksplan: params => {
-    return axios.post(`/res/index/getchecksplan`, params).then(res => res.data)
+    return axios.post(`/res/index/getchecksplanAll`, params).then(res => res.data)
   },
   getAssetBase16: params => {
     return axios.post(`/res/index/getAssetBase16`, params).then(res => res.data)
@@ -136,13 +136,7 @@ export default {
       ...payload
     })
   },
-  /**
-   * [bindAsset 资产标签绑定]
-   * @param {[type]} payload [资产编号]
-   */
-  bindAsset: payload => {
-    return axios.post('/bind', {
-      ...payload
-    })
+  getAssetImg (params) {
+    return axios.post(`/res/index/getAssetImg`, params).then(res => res.data)
   }
 }

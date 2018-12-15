@@ -1,12 +1,12 @@
 <template>
 <div class="asset-check__add">
-  <el-dialog title="新建任务" class="model" :visible="insertVisible" :before-close="handleClose" :modal="true" :close-on-press-escape="false" :close-on-click-modal="false" :show-close="false">
+  <el-dialog title="新增计划" class="model" :visible="insertVisible" :before-close="handleClose" :modal="true" :close-on-press-escape="false" :close-on-click-modal="false" :show-close="false">
     <el-form :model="submitForm" :rules="submitRule" ref="submitForm" label-width="100px">
       
-      <el-form-item label="任务名称" prop="plan_name">
+      <el-form-item label="计划名称" prop="plan_name">
          <el-input v-model="submitForm.plan_name"></el-input>
        </el-form-item>
-      <el-form-item label="任务说明" prop="plan_memo">
+      <el-form-item label="计划说明" prop="plan_memo">
         <el-input v-model="submitForm.plan_memo"></el-input>
       </el-form-item>
       <!-- <el-form-item label="任务执行人" prop="executor">
@@ -25,7 +25,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button  @click="handleClose">关 闭</el-button>
-      <el-button :loading="loading" type="primary" @click="handleSubmit()">提交任务</el-button>
+      <el-button :loading="loading" type="primary" @click="handleSubmit()">确定</el-button>
     </span>
   </el-dialog>
 </div>
@@ -85,7 +85,7 @@ export default {
         plan_name: [
           {
             required: true,
-            message: '请输入任务名称',
+            message: '请输入计划名称',
             trigger: 'blur'
           },
           {
@@ -98,7 +98,7 @@ export default {
         plan_memo: [
           {
             required: true,
-            message: '请填写任务说明',
+            message: '请填写计划说明',
             trigger: 'change'
           }
         ],
@@ -167,16 +167,15 @@ export default {
             plan_name: this.submitForm.plan_name,
             deadline: _deadlineDate,
             create_person: JSON.parse(sessionStorage.getItem('user')).UserID,
-            token: JSON.parse(JSON.stringify(sessionStorage.getItem('token')))
+            token: window.sessionStorage.getItem('token')
           }
           api.postCheck(params).then(data => {
             this.loading = false
             if (data.ID === '-1') {
-              // this.$message({
-              //   type: 'error',
-              //   message: `${data.msg}`
-              // })
-              alert(`${data.msg}`)
+              this.$message({
+                type: 'error',
+                message: `${data.msg}`
+              })
               // this.handleClose()
             } else {
               this.$message({
@@ -225,5 +224,5 @@ export default {
 }
 .el-dialog__header{background: #f6f6f6;border-bottom: 1px solid #ddd;}
 .el-dialog__footer{border-top:1px solid #ddd;}
-.model .el-form{width:380px;margin: 0 auto;}
+.asset-check__add .model .el-form{width:380px;margin: 0 auto;}
 </style>

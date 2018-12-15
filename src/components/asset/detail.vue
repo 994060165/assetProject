@@ -15,21 +15,32 @@
         <p><b>资产位置</b><span>{{asset.location}}</span></p>
       </el-col>
       <el-col :span="10">
-        <p><b>资产图片</b><span><img src="../../assets/images/u433.png"/></span></p>
         <p><b>资产状态</b><span>完好</span></p>
         <p><b>所属课题</b><span>{{asset.topic}}</span></p>
         <p><b>领用人</b><span>{{asset.person}}</span></p>
       </el-col>
     </el-row>
     <el-row>
-      <el-collapse v-model="collapseActiveName">
-        <el-collapse-item title="位置详情" name="1">
-          <el-table :data="asset.locationHis">
-            <el-table-column prop="datetime" label="时间"></el-table-column>
-            <el-table-column prop="location" label="位置"></el-table-column>
-            <el-table-column prop="description" label="内容"></el-table-column>
-            <el-table-column prop="reason" label="说明"></el-table-column>
-          </el-table>
+      <el-collapse v-model="collapseActiveName" v-if="type==='assetwls'">
+        <el-collapse-item title="资产图片" name="1">
+          <el-row :gutter="10">
+            <el-col :span="6">
+              <div class="text-center">标签图片</div>
+              <img :src="imgs.img_bq" alt="" class="w-full">
+            </el-col>
+            <el-col :span="6">
+              <div class="text-center">局部图片</div>
+              <img :src="imgs.img_jb" alt="" class="w-full">
+            </el-col>
+            <el-col :span="6">
+              <div class="text-center">整体图片</div>
+              <img :src="imgs.img_zt" alt="" class="w-full">
+            </el-col>
+            <el-col :span="6">
+              <div class="text-center">其它图片</div>
+              <img :src="imgs.img_qt" alt="" class="w-full">
+            </el-col>
+          </el-row>
         </el-collapse-item>
       </el-collapse>
     </el-row>
@@ -41,20 +52,24 @@
 </template>
 
 <script>
-import api from '@/api'
-
+import { type } from '../../../static/data'
 export default {
   name: 'asset__detail',
   props: {
     visible: {
       type: Boolean,
       default: false
+    },
+    imgs: {
+      type: Object,
+      default: {}
     }
   },
   data () {
     return {
-      collapseActiveName: 0,
-      asset: {}
+      collapseActiveName: '1',
+      asset: {},
+      type: type
     }
   },
   computed: {
@@ -62,13 +77,13 @@ export default {
   methods: {
     handleClose () {
       this.asset = {}
-      this.collapseActiveName = 0
+      this.collapseActiveName = '1'
       this.$emit('closeDialog')
     },
     handleOpen () {
-      this.asset.locationHis || api.getAssetLocation(this.asset.asset_id).then(response => {
-        this.asset.locationHis = response.data.locationHis
-      })
+      // this.asset.locationHis || api.getAssetLocation(this.asset.asset_id).then(response => {
+      //   this.asset.locationHis = response.data.locationHis
+      // })
     }
   }
 }

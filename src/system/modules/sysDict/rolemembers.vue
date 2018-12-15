@@ -123,7 +123,7 @@ export default {
         page: this.currentPage,
         pagesize: this.pageSize
       }
-      this.$request.post('/commweb/sys/index/getUsersByRoleID', params).then(res => {
+      this.$request.post('/sys/index/getUsersByRoleID', params).then(res => {
         let data = res.data
         this.tableData = data.data
         this.total = data.count

@@ -107,7 +107,7 @@
           pagesize: this.pageSize,
           RoleID: this.queryKey
         }
-        this.$request.post(`/commweb/sys/index/getRolesTree`, params).then(res => {
+        this.$request.post(`/sys/index/getRolesTree`, params).then(res => {
           this.loading = false
           let data = res.data
           this.total = data.count

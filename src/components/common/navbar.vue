@@ -6,7 +6,8 @@
     </el-col>
     <el-col :span="12">
       <!--<a href="#">关于</a>-->
-      <router-link to="/login">退出</router-link>
+      <span @click="logout" style="cursor: pointer; color: white;">退出</span>
+      <!-- <router-link to="/login">退出</router-link> -->
     </el-col>
   </el-row>
   <!-- <el-dropdown>
@@ -41,7 +42,12 @@ export default {
 
     }
   },
-  methods: {}
+  methods: {
+    logout () {
+      window.sessionStorage.clear()
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 

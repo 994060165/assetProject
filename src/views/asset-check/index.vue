@@ -1,12 +1,10 @@
 <template>
 <div class="asset-check">
-
-  <datagrid ref="datagrid" :table-data="allChecks">
-    
-    <template slot="action">
-      <el-select v-model="finished" placeholder="请选择任务进度" @change="handleChange">
+  <el-row class="padding-10  text-right">
+    <el-select v-model="finished" placeholder="请选择计划状态" @change="handleChange">
         <el-option label="全部" value=""></el-option>
         <el-option label="未盘点" value="未盘点"></el-option>
+        <el-option label="待盘点" value="待盘点"></el-option>
         <el-option label="盘点中" value="盘点中"></el-option>
         <el-option label="已完成" value="已完成"></el-option>
       </el-select>
@@ -16,21 +14,41 @@
         v-model="keystr" @keyup.enter.native="handleRefresh">
         <el-button slot="append" icon="el-icon-search" @click="handleRefresh"></el-button>
       </el-input>
-      <el-button type="primary" icon="plus" @click="addPlan()">新增盘点任务</el-button>
-    </template>
-    <template slot="table">
-      <el-table-column prop="plan_name" label="任务名称"></el-table-column>
-      <el-table-column prop="plan_memo" label="任务说明">
-      </el-table-column>
-      <el-table-column prop="deadline" label="截止时间"></el-table-column>
-      <el-table-column prop="create_person" label="创建人"></el-table-column>
-      <el-table-column  width="100" label="操作">
-        <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="toAddBind(scope.row.plan_id)"></el-button>
-        </template>
-      </el-table-column>
-    </template>
-  </datagrid>
+      <el-button type="primary" icon="plus" @click="addPlan()">新增盘点计划</el-button>
+  </el-row>
+   <el-row class="padding-10">
+      <el-table
+        border
+        ref="table"
+        :data="allChecks">
+        <el-table-column prop="plan_name" label="计划名称"></el-table-column>
+        <el-table-column prop="plan_memo" label="计划说明">
+        </el-table-column>
+        <el-table-column prop="deadline" label="截止时间"></el-table-column>
+        <el-table-column prop="create_person" label="创建人"></el-table-column>
+        <el-table-column  width="100" label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" icon="el-icon-view" title="查看计划" size="mini" @click="toAddBind(scope.row.plan_id)"></el-button>
+            <el-button
+              type="success" 
+              icon="el-icon-edit" 
+              title="开启计划" 
+              size="mini" 
+              v-if="scope.row.exeResult === '未盘点'"
+              @click="changeStatus(scope.row)"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-row>
+    <el-row class="padding-10 text-right">
+      <el-pagination
+        @current-change="handleChange"
+        :current-page="page"
+        :page-size="pagesize"
+        layout="total, prev, pager, next"
+        :total="total">
+      </el-pagination>
+    </el-row>
 
   <detail ref="detail"></detail>
   <insert
@@ -61,7 +79,10 @@ export default {
       currentAsset: {},
       finished: '',
       insertVisible: false,
-      keystr: ''
+      keystr: '',
+      page: 1,
+      pagesize: 10,
+      total: 0
     }
   },
   methods: {
@@ -69,24 +90,26 @@ export default {
       this.insertVisible = false
       this.handleRefresh()
     },
-    handleChange () {
+    handleChange (val) {
+      this.page = val
       this.handleRefresh()
     },
     handleRefresh () {
-      this.$refs.datagrid.table.loading = false
+      this.loading = true
       let params = {
         plan_name: this.keystr,
         exeResult: this.finished,
-        page: this.$refs.datagrid.page.currentPage,
-        pagesize: this.$refs.datagrid.page.pageSize
+        page: this.page,
+        pagesize: this.pagesize,
+        token: window.sessionStorage.getItem('token')
       }
       api.getchecksplan(params).then(data => {
         this.allChecks = data.data
-        this.$refs.datagrid.page.total = data.count
-        this.$refs.datagrid.table.loading = false
+        this.total = data.count
+        this.loading = false
       }, err => {
         console.log(err)
-        this.$refs.datagrid.table.loading = false
+        this.loading = false
       })
     },
     // 新增盘点计划
@@ -95,6 +118,37 @@ export default {
     },
     toAddBind (id) {
       this.$router.push({path: `/asset-bindcheck/${id}`})
+    },
+    changeStatus (row) {
+      this.$confirm('是否将计划状态更改为待盘点?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = Object.assign({}, row)
+        params.exeResult = '待盘点'
+        params.token = window.sessionStorage.getItem('token')
+        this.$request.post(`/res/index/putchecksplan`, params).then(res => {
+          let data = res.data
+          if (data.ID === '-1') {
+            this.$message({
+              type: 'error',
+              message: `操作失败！${data.msg}`
+            })
+          } else {
+            this.$message({
+              type: 'success',
+              message: '操作成功!'
+            })
+            this.handleRefresh()
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消更改!'
+        })
+      })
     }
   }
 }

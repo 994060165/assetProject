@@ -118,8 +118,9 @@
 </template>
 
 <script>
-  import personDialog from '../../../../../../components/sysSelectPeople.vue'
+  import personDialog from '@/components/sysSelectPeople.vue'
   import createOrgnizationDialog from './createOrgnizaitonDialog.vue'
+  import {TokenAPI} from '@/request/TokenAPI.js'
   export default {
     data () {
       return {
@@ -140,7 +141,8 @@
         page: {
           page: 1,
           pageSize: 10
-        }
+        },
+        token: TokenAPI.getToken()
       }
     },
     // methods end
@@ -165,7 +167,7 @@
           pagesize: 1000,
           OrgName: ''
         }
-        this.$request.post('/commweb/sys/index/getAllOrg', params).then(res => {
+        this.$request.post('/sys/index/getAllOrg', params).then(res => {
           let data = res.data.data
           this.deptInfo = data[0]
           this.activeIndex = 0
@@ -185,7 +187,7 @@
           page: this.page.page,
           pagesize: this.page.pageSize
         }
-        this.$request.post('/commweb/sys/index/getUsersByOrgID', params).then(res => {
+        this.$request.post('/sys/index/getUsersByOrgID', params).then(res => {
           let data = res.data
           this.deptPerson = data.data
           this.total = data.count
@@ -238,7 +240,7 @@
           OrgID: this.deptInfo.OrgID,
           UserID: userIds
         }
-        this.$request.post('/commweb/sys/index/setOrgUsers', params).then(res => {
+        this.$request.post('/sys/index/setOrgUsers', params).then(res => {
           let data = res.data
           if (data.ID === '-1') {
             this.$message(`${data.msg}`)
@@ -253,22 +255,22 @@
       },
       removeMember (row) {
         let params = {
-          orgId: this.deptInfo.id,
-          userIds: [row.userId]
+          OrgID: row.OrgID,
+          UserID: row.UserID,
+          token: this.token
         }
-        console.log(params)
-        // LocalDeptAPI.deleteDeptPerson(params).then(data => {
-        //   this.$message({
-        //     message: '删除成功！',
-        //     type: 'success'
-        //   })
-        //   this.getDeptPerson(this.deptInfo.id)
-        // }, () => {
-        //   this.$message({
-        //     message: '删除失败！',
-        //     type: 'error'
-        //   })
-        // })
+        this.$request.post('/sys/index/deleteorgtouser', params).then(res => {
+          this.$message({
+            message: '删除成功！',
+            type: 'success'
+          })
+          this.getDeptPerson(this.deptInfo.id)
+        }, () => {
+          this.$message({
+            message: '删除失败！',
+            type: 'error'
+          })
+        })
       },
       closePerson () {
         this.personDialogVisible = false

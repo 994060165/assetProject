@@ -105,7 +105,7 @@ export default {
       let params = this.dictForm
       this.$refs['dictForm'].validate((valid) => {
         if (valid) {
-          this.$request.post(`/commweb/sys/index/putSysData`, params).then(res => {
+          this.$request.post(`/sys/index/putSysData`, params).then(res => {
             let data = res.data
             if (data.ID === '0') {
               this.$message(`${data.msg}`)

@@ -1,32 +1,68 @@
 <template>
 <div class="main__sidebar">
   <el-menu :router="true" :default-active="currentRouter">
-    <el-submenu v-if="menu1.children" v-for="(menu1, index) in currentMenu" :key="index" :index="menu1.children[0].path">
-      <template slot="title"><i :class="`el-icon-${menu1.icon}`"></i>{{menu1.name}}</template>
-      <el-menu-item v-for="(menu2, index) in menu1.children" :key="index" :index="menu2.path">{{menu2.name}}</el-menu-item>
-    </el-submenu>
-    <el-menu-item v-else :index="menu1.path"><i :class="`el-icon-${menu1.icon}`"></i>{{menu1.name}}</el-menu-item>
+    <!-- <el-submenu v-if="menu1.children" v-for="(menu1, index) in currentMenu" :key="index" :index="menu1.children[0].path">
+      <template slot="title"><i :class="`el-icon-${menu1.icon}`"></i>{{menu1.FunName}}</template>
+      <el-menu-item v-for="(menu2, index) in menu1.children" :key="index" :index="menu2.path">{{menu2.FunName}}</el-menu-item>
+    </el-submenu>  v-else-->
+    <el-menu-item  v-for="(menu1, index) in currentMenu" :key="index" :index="menu1.FunLink"><i :class="`el-icon-${menu1.icon}`"></i>{{menu1.FunName}}</el-menu-item>
   </el-menu>
 </div>
 </template>
 
 <script>
-import {
-  mapGetters
-} from 'vuex'
-
 export default {
   computed: {
-    ...mapGetters([
-      'currentMenu'
-    ])
   },
   data () {
     return {
-      currentRouter: this.$router.history.current.fullPath
+      currentRouter: this.$router.history.current.fullPath,
+      currentMenu: []
     }
   },
-  methods: {}
+  mounted () {
+    this.getData()
+  },
+  methods: {
+    getData () {
+      let data = JSON.parse(window.sessionStorage.getItem('menu'))
+      let one = []
+      let two = []
+      let three = []
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].MenuLevelID === '2') {
+          three.push(data[i])
+        } else if (data[i].MenuLevelID === '1') {
+          two.push(data[i])
+        } else if (data[i].MenuLevelID === '0') {
+          one.push(data[i])
+        }
+      }
+      for (let m = 0; m < one.length; m++) {
+        one[m].children = []
+        for (let n = 0; n < two.length; n++) {
+          if (two[n].FatherID === one[m].FunID) {
+            one[m].children.push(two[n])
+          }
+        }
+      }
+      for (let j = 0; j < two.length; j++) {
+        two[j].children = []
+        for (let k = 0; k < three.length; k++) {
+          if (three[k].FatherID === two[j].FunID) {
+            two[j].children.push(three[k])
+          }
+        }
+      }
+      console.log(two)
+      this.currentMenu = two
+    },
+    handleSelect (keyPath) {
+      this.$router.push({
+        path: keyPath
+      })
+    }
+  }
 }
 </script>
 

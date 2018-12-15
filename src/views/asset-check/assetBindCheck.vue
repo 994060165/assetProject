@@ -1,35 +1,39 @@
 <template>
 <div class="asset-check">
-
-  <datagrid ref="datagrid">
-    
-    <template slot="action">
-      <el-input 
-        class="w-400"
-        placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
-        v-model="keystr" @keyup.enter.native="handleRefresh">
-        <el-button slot="append" icon="el-icon-search" @click="handleRefresh"></el-button>
-      </el-input>
-      <el-button type="primary" @click="bindAsset">添加数据</el-button>
-    </template>
-  </datagrid>
+  <el-row class="padding-10  text-right">
+      
+    <el-input 
+      class="w-400"
+      placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
+      v-model="keystr" @keyup.enter.native="handleRefresh">
+      <el-button slot="append" icon="el-icon-search" @click="handleRefresh"></el-button>
+    </el-input>
+    <el-button type="primary" @click="bindAsset">添加数据</el-button>
+  </el-row>
   <el-row>
     <el-table :data="allChecks" v-loading="loading" element-loading-text="数据加载中，请稍候...">
       <el-table-column prop="name" label="设备名称" width="100"></el-table-column>
       <el-table-column prop="asset_num" label="设备标签号"></el-table-column>
       <el-table-column prop="location" label="设备位置"></el-table-column>
+      <el-table-column prop="deparment" label="部门"></el-table-column>
       <el-table-column prop="check_person" label="盘点人"></el-table-column>
       <el-table-column label="盘点日期">
         <template slot-scope="scope">
-          {{(!!scope.row.check_date) ? (scope.row.check_date | moment) : ''}}
+          {{(!!scope.row.check_date) ? (scope.row.check_date) : ''}}
         </template>
       </el-table-column>
-      <el-table-column prop="check_flag" label="盘点状态"></el-table-column>
+      <el-table-column label="盘点状态">
+        <template slot-scope="scope">
+          <span v-if="scope.row.check_flag === '未盘点'" class="color-organge">未盘点</span>
+          <span v-else-if="scope.row.check_flag === '已盘点'" class="color-green">已盘点</span>
+          <span v-else>{{scope.row.check_flag}}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="check_result" label="盘点结果 "></el-table-column>
       <el-table-column  width="100" label="操作">
         <template slot-scope="scope">
           <!-- <el-button icon="el-icon-delete" size="mini" @click="deleteAsset(scope.row.id)"></el-button> -->
-          <el-button icon="el-icon-delete" type="primary" size="mini" @click="deleteAsset(scope.row.detail_id)"></el-button>
+          <el-button icon="el-icon-delete" type="primary" title="移除" size="mini" @click="deleteAsset(scope.row.detail_id)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -75,7 +79,7 @@
            <el-row>
             <el-table :data="assetList" @selection-change="handleSelectionChange" border>
               <el-table-column  width="50" type="selection"></el-table-column>
-              <el-table-column prop="asset_num" label="设备名称" width="100"></el-table-column>
+              <el-table-column prop="name" label="设备名称" width="100"></el-table-column>
               <el-table-column prop="asset_num" label="设备标签号"></el-table-column>
               <el-table-column prop="location" label="设备位置"></el-table-column>
               <!-- <el-table-column prop="parent_tag_num" label="父资产标签号" width="120"></el-table-column> -->
@@ -199,7 +203,8 @@ export default {
         plan_name: this.keystr,
         exeResult: this.finished,
         page: this.currentPage,
-        pagesize: this.pageSize
+        pagesize: this.pageSize,
+        order: 'check_flag'
       }
       api.getPlanAssteList(params).then(data => {
         console.log('data', data)
@@ -221,11 +226,18 @@ export default {
         page: this.assetsPage,
         pagesize: this.assetsPagesize,
         keystr: this.assetkeystr,
-        token: JSON.parse(sessionStorage.getItem('token'))
+        token: window.sessionStorage.getItem('token')
       }
       api.getAssetBase16(params).then(data => {
-        this.assetsTotal = data.count
-        this.assetList = data.data
+        if (data.ID === '-1') {
+          this.$message({
+            type: 'error',
+            message: `信息获取失败！失败原因：${data.msg}`
+          })
+        } else {
+          this.assetsTotal = data.count
+          this.assetList = data.data
+        }
       })
     },
     // 资产页码改变
@@ -315,7 +327,7 @@ export default {
     deleteAsset (id) {
       let params = {
         plan_id: this.planId,
-        token: JSON.parse(sessionStorage.getItem('token')),
+        token: window.sessionStorage.getItem('token'),
         detail_id: id
       }
       api.deletechecksplanDetail(params).then(data => {

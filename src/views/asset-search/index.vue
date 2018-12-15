@@ -11,10 +11,11 @@
           <el-form-item label="资产名称">
             <el-input v-model="searchForm.name"></el-input>
           </el-form-item>
-          <el-form-item label="责任部门">
-            <el-select filterable clearable v-model="searchForm.deparment" placeholder="请选择责任部门">
+          <el-form-item label="部门">
+            <el-input v-model="searchForm.deparment" placeholder="请选择部门"></el-input>
+            <!-- <el-select  filterable clearable>
               <el-option v-for="(item, index) in allDeparments" :key="index" :label="item" :value="item"></el-option>
-            </el-select>
+            </el-select> -->
           </el-form-item>
           <el-form-item label="资产最小价值">
             <el-input-number v-model="searchForm.minvalue" :min="0" :step="100"></el-input-number>
@@ -90,6 +91,7 @@
   <detail 
     ref="detail"
     :visible="visible"
+    :imgs="imgs"
     @closeDialog="closeDialog">
   </detail>
 
@@ -101,16 +103,8 @@ import datagrid from '@/components/common/datagrid.vue'
 import detail from '@/components/asset/detail.vue'
 import api from '@/api'
 import moment from 'moment'
-import {
-  mapGetters
-} from 'vuex'
-
 export default {
   computed: {
-    ...mapGetters([
-      'allDeparments',
-      'allPersons'
-    ])
   },
   components: {
     datagrid,
@@ -135,7 +129,9 @@ export default {
         maxvalue: '',
         start_time: []
       },
-      isFuzzy: false
+      allPersons: [],
+      isFuzzy: false,
+      imgs: {}
     }
   },
   methods: {
@@ -175,6 +171,15 @@ export default {
     seeDetail (row) {
       this.visible = true
       this.$refs.detail.asset = row
+      let params = {
+        asset_id: row.asset_id,
+        asset_num: row.asset_num,
+        token: window.sessionStorage.getItem('token')
+      }
+      api.getAssetImg(params).then(data => {
+        console.log(data)
+        this.imgs = data
+      })
     },
     closeDialog () {
       this.visible = false

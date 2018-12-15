@@ -255,7 +255,7 @@ export default {
             let params = Object.assign({}, this.form)
             // params.Password = this.$md5(params.Password)
             // params.repassword = this.$md5(params.repassword)
-            this.$request.post('/commweb/sys/index/regUser', params).then(res => {
+            this.$request.post('/sys/index/regUser', params).then(res => {
               this.afterSub(res)
             })
           })

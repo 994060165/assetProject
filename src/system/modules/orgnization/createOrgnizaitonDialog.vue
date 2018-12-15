@@ -128,7 +128,7 @@
             } else {
               params.tag = '0'
             }
-            this.$request.post('/commweb/sys/index/putSysOrg', params).then(res => {
+            this.$request.post('/sys/index/putSysOrg', params).then(res => {
               let data = res.data
               if (data.ID === '0') {
                 this.addDeptDisabled = false

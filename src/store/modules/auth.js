@@ -15,19 +15,24 @@ const state = {
     },
     {
       name: '标签打印',
-      icon: 'setting',
+      icon: 'printer',
       path: '/asset-bind'
     },
     {
       name: '盘点计划',
       icon: 'edit',
       path: '/asset-check'
+    },
+    {
+      name: '设备管理',
+      icon: 'setting',
+      path: '/assetMachine'
+    },
+    {
+      name: '模板管理',
+      icon: 'tickets',
+      path: '/assetTpl'
     }
-    // {
-    //   name: '资产位置',
-    //   icon: 'location-outline',
-    //   path: '/asset-position'
-    // }
   ]
 }
 

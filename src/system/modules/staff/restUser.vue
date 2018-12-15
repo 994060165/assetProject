@@ -83,7 +83,7 @@ export default {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.formLoading = true
             let params = Object.assign({}, this.form)
-            this.$request.post('/commweb/sys/index/ResetPassword', params).then(res => {
+            this.$request.post('/sys/index/ResetPassword', params).then(res => {
               this.afterSub(res)
             })
           })

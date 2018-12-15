@@ -128,7 +128,7 @@ export default {
         page: this.currentPage,
         pagesize: this.pageSize
       }
-      this.$request.post('/commweb/sys/index/getAlluser', params).then(res => {
+      this.$request.post('/sys/index/getAlluser', params).then(res => {
         let data = res.data
         if (res.data) {
           this.tableData = data.data
@@ -154,7 +154,7 @@ export default {
           RoleID: this.roleId,
           UserIDList: userIds
         }
-        this.$request.post('/commweb/sys/index/insertRoleToUserAll', params).then(res => {
+        this.$request.post('/sys/index/insertRoleToUserAll', params).then(res => {
           let data = res.data
           if (data.ID === '-1') {
             this.$message('添加失败')

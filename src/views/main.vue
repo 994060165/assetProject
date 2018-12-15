@@ -36,10 +36,16 @@ export default {
     ]),
     title () {
       let menu = [].concat(this.currentMenu)
-      menu.push({
-        title: 'assetBindCheck',
-        name: '盘点清单'
-      })
+      menu.push(
+        {
+          title: 'assetBindCheck',
+          name: '盘点清单'
+        },
+        {
+          title: 'assetTpl',
+          name: '打印模板'
+        }
+      )
       for (let i = 0; i < menu.length; i++) {
         let m = menu[i]
         if (m.title && m.title === this.$route.name) {

@@ -26,7 +26,6 @@
 </style>
 <script>
 // import { mapGetters } from 'vuex';
-import echarts from 'echarts'
 export default {
   // computed: mapGetters(['isLogined']),
   data () {
@@ -39,7 +38,7 @@ export default {
   methods: {
     drawPie () {
       // 基于准备好的dom，初始化echarts实例
-      let myChartPie = this.$echarts.init(document.getElementById('myChart-pie'))
+      let myChartPie = window.echarts.init(document.getElementById('myChart-pie'))
       // 绘制图表
       myChartPie.setOption({
         title: {
@@ -119,7 +118,7 @@ export default {
       })
     },
     drawBar () {
-      let myChartBar = this.$echarts.init(document.getElementById('myChart-bar'))
+      let myChartBar = window.echarts.init(document.getElementById('myChart-bar'))
       // 绘制图表
       myChartBar.setOption({
         backgroundColor: '#fff',
@@ -148,7 +147,7 @@ export default {
           barWidth: 8, // 柱图的宽度
           itemStyle: {
             normal: {
-              color: new echarts.graphic.LinearGradient(
+              color: new window.echarts.graphic.LinearGradient(
                 0, 0, 0, 1,
                 [
                   {offset: 0, color: '#80bdf6'},
@@ -158,7 +157,7 @@ export default {
               )
             },
             emphasis: { // 强调样式
-              color: new echarts.graphic.LinearGradient(
+              color: new window.echarts.graphic.LinearGradient(
                 0, 0, 0, 1,
                 [
                   {offset: 0, color: '#2378f7'},

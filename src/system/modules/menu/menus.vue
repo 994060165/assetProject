@@ -120,7 +120,7 @@ export default {
     },
     // 获取菜单数据
     getMenusData () {
-      this.$request.get(`/commweb/sys/index/gettree`).then(res => {
+      this.$request.get(`/sys/index/gettree`).then(res => {
         let obj = res.data
         let data = []
         for (let item in obj) {
@@ -221,7 +221,7 @@ export default {
         delete form.children
       }
       // form.Icon = this.iconImg
-      this.$request.post(`/commweb/sys/index/putTree`, form).then(res => {
+      this.$request.post(`/sys/index/putTree`, form).then(res => {
         this.fullscreenLoading = false
         let data = res.data
         if (data.ID === '-1') {
@@ -290,7 +290,7 @@ export default {
       console.log(data)
       var r = confirm('该菜单对应的角色、部门、分组关联关系将一并删除，是否确认删除？')
       if (r === true) {
-        this.$request.post(`/commweb/sys/index/deletetree`, params).then(res => {
+        this.$request.post(`/sys/index/deletetree`, params).then(res => {
           this.$message('删除成功')
           this.getMenusData()
         }, err => {

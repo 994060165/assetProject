@@ -1,20 +1,18 @@
 import Vue from 'vue'
-import Element from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import 'babel-polyfill'
 import router from './router'
 import store from './store'
 import moment from 'moment'
 import Request from './request'
-import echarts from 'echarts'
-// import { Message } from 'element-ui'
-Vue.prototype.$message = Element.Message
-Vue.prototype.$echarts = echarts
-console.log(Element)
-Vue.config.productionTip = false
 
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import '@/assets/styles/common.css'
+// Vue.prototype.$message = Element.Message
 Vue.use(Element)
+
+Vue.config.productionTip = false
 Vue.prototype.$request = Request
 
 Vue.filter('moment', function (value, formatString) {

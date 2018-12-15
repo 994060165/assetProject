@@ -11,6 +11,9 @@ module.exports = {
   entry: {
     app: ['babel-polyfill', './src/main.js']
   },
+  externals: {
+    'echarts': 'echarts'
+  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

@@ -66,13 +66,13 @@ export default {
       let params = this.roleform
       this.$refs['roleForm'].validate((valid) => {
         if (valid) {
-          this.$request.post(`/commweb/sys/index/putSysRole`, params).then(res => {
+          this.$request.post(`/sys/index/putSysRole`, params).then(res => {
             let data = res.data
             if (data.ID === '0') {
               this.$message(`${data.msg}`)
             } else {
               this.$message('修改成功')
-              this.$emit('createRoleSuccess')
+              this.$emit('createSuccess')
             }
           })
         }

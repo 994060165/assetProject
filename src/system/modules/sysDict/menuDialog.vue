@@ -79,7 +79,7 @@
     methods: {
       // 获取菜单数据
       getMenusData () {
-        this.$request.get(`/commweb/sys/index/gettree`).then(res => {
+        this.$request.get(`/sys/index/gettree`).then(res => {
           let obj = res.data
           let data = []
           for (let item in obj) {
@@ -122,7 +122,7 @@
         let params = {
           RoleID: this.roleId
         }
-        this.$request.post('/commweb/sys/index/getFuns', params).then(res => {
+        this.$request.post('/sys/index/getFuns', params).then(res => {
           if (res.data) {
             this.tags = res.data
           }
@@ -166,7 +166,7 @@
           RoleID: this.roleId,
           FunID: `${menuIds}`
         }
-        this.$request.post(`/commweb/sys/index/setRoleFuncs`, params).then(res => {
+        this.$request.post(`/sys/index/setRoleFuncs`, params).then(res => {
           console.log(res.data)
           let data = res.data
           if (data.ID === '0') {
