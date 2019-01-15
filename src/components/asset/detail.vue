@@ -11,6 +11,7 @@
         <p><b>采购金额</b><span>{{asset.value}}</span></p>
         <p><b>资产类别</b><span>{{asset.financial_category}}</span></p>
         <p><b>责任部门</b><span>{{asset.deparment}}</span></p>
+        <p><b>领用人</b><span>{{asset.person}}</span></p>
         <p><b>领用时间</b><span>{{asset.start_time}}</span></p>
         <p><b>资产位置</b><span>{{asset.location}}</span></p>
       </el-col>

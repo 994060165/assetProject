@@ -202,13 +202,30 @@ export default {
     },
     changeAsset (assetForm) {
       let params = Object.assign({token: this.token}, assetForm)
-      console.log(params)
       api.changeAsset(params).then(data => {
+        if (data.ID === '1') {
+          this.$message({
+            type: 'success',
+            message: '修改成功!'
+          })
+          this.cancel()
+          if (this.isFuzzy) {
+            this.handleEnter()
+          } else {
+            this.handleSearch()
+          }
+        } else {
+          this.$message({
+            type: 'error',
+            message: `修改失败!${data.msg}`
+          })
+        }
+      }, err => {
+        console.log(err)
         this.$message({
-          type: 'success',
-          message: '修改成功!'
+          type: 'error',
+          message: `网络原因，修改失败!`
         })
-        this.cancel()
       })
     },
     cancel () {

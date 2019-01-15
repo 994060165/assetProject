@@ -2,8 +2,8 @@
   <div class="main">
     <navbar></navbar>
     <sidebar></sidebar>
-    <div class="main__wrapper">
-        <router-view class="main__view" ></router-view>
+    <div class="main__wrapper" style="margin-left: 150px;padding: 80px 16px 16px;">
+        <router-view></router-view>
     </div>
   </div>
 </template>
