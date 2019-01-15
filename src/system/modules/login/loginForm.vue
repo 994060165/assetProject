@@ -76,8 +76,9 @@ export default {
           if (data.data.Orginfo) {
             window.sessionStorage.setItem('org', JSON.stringify(data.data.Orginfo[0]))
           }
+          let menuList = this.duplicate(data.data.treelist)
           window.sessionStorage.setItem('token', data.token)
-          window.sessionStorage.setItem('menu', JSON.stringify(data.data.treelist))
+          window.sessionStorage.setItem('menu', JSON.stringify(menuList))
           window.sessionStorage.setItem('user', JSON.stringify(userInfo))
           Vue.prototype.$userInfo = userInfo
           setTimeout(() => {
@@ -90,6 +91,17 @@ export default {
           this.errorM = data.msg
         }
       })
+    },
+    duplicate (arr) {
+      let obj = {}
+      let arr2 = []
+      arr.forEach(value => {
+        obj[value.FunID] = value
+      })
+      for (let item in obj) {
+        arr2.push(obj[item])
+      }
+      return arr2
     },
     refresh () {
     }

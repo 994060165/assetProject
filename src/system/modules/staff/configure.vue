@@ -1,11 +1,11 @@
 <template>
-  <div class="dictTable">
-    <section class="">
+  <el-row >
+    <el-row class="">
       <el-col :span="24" class="toolbar" style="background: white;padding-bottom: 0px;">
-        <el-row>
+        <el-row class="padding-10" >
           <el-col :span="17">
-            <span class="icon" @click="goBack()"></span>
-            <span class="title">人员角色信息</span>
+            <el-button type="primary" @click="goBack()">返回</el-button>
+            <span class="title padding-10" sytle="display: inline-block;">人员角色信息</span>
           </el-col>
           <el-col :span="7" style="float:left;">
             <el-row>
@@ -65,8 +65,8 @@
           </el-table-column>
         </el-table>
       </el-col>
-    </section>
-  </div>
+    </el-row>
+  </el-row>
 </template>
 
 <script type="text/ecmascript-6">

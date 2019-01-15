@@ -56,7 +56,7 @@
 				<el-table-column
 					align="center"
 					label="操作">
-					<template scope="scope">
+					<template slot-scope="scope">
              <!--修改-->
 						<el-button title="修改" size="mini" type="primary" icon="el-icon-edit" @click="modify(scope.row)">
             </el-button>
@@ -353,5 +353,3 @@
 </script>
 
 
-<style scoped lang="scss">
-</style>

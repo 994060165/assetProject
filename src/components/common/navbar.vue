@@ -6,7 +6,8 @@
     </el-col>
     <el-col :span="12">
       <!--<a href="#">关于</a>-->
-      <span @click="logout" style="cursor: pointer; color: white;">退出</span>
+      <span v-if="type === 'assetwls'" @click="logout" style="cursor: pointer; color: white;">退出</span>
+      <span v-else @click="kjylogout" style="cursor: pointer; color: white;">退出</span>
       <!-- <router-link to="/login">退出</router-link> -->
     </el-col>
   </el-row>
@@ -27,10 +28,7 @@
 </template>
 
 <script>
-// import {
-//   mapGetters
-// } from 'vuex'
-
+import { type } from '../../../static/data'
 export default {
   // computed: {
   //   ...mapGetters([
@@ -39,10 +37,14 @@ export default {
   // },
   data () {
     return {
-
+      type: type
     }
   },
   methods: {
+    kjylogout () {
+      window.sessionStorage.clear()
+      window.location.href = 'https://passport.escience.cn/logout?WebServerURL=http://159.226.186.90/asset'
+    },
     logout () {
       window.sessionStorage.clear()
       this.$router.push('/login')

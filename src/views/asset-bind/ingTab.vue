@@ -10,16 +10,63 @@
         :file-list="fileList">
         <el-button size="small" type="text"><i class="el-icon-upload2 upload" @clik="submitUpload"></i>点击上传</el-button>
       </el-upload> -->
-      <!-- <el-button @click="confirmAsset" type="primary">改为待打印</el-button> npm -->
-      <el-button @click="viewAssets" type="primary">预览({{selectSize}})</el-button>
+      <!-- <el-button @click="confirmAsset" type="primary">打印</el-button> npm -->
+      <!-- <el-button @click="viewAssets" type="primary">提交打印({{selectSize}})</el-button> -->
       <el-input 
         class="w-400"
         placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
         v-model="keystr" @keyup.enter.native="getTable">
         <el-button slot="append" icon="el-icon-search" @click="getTable"></el-button>
       </el-input>
+      <el-button type="primary" v-if="searchForm" @click="formShow = !formShow"><i :class="formShow?'el-icon-arrow-down':'el-icon-arrow-left'"></i>高级</el-button>
     </el-row>
+    <el-form ref="searchForm" label-width="100px" :model="searchForm"  v-show="formShow">
+      <el-row :gutter="16">
+        <el-col :span="8">
+          <el-form-item label="资产名称">
+            <el-input v-model="searchForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="部门">
+            <!-- <el-select filterable clearable v-model="searchForm.deparment" placeholder="请选择责任部门">
+              <el-option v-for="(item, index) in allDeparments" :key="index" :label="item" :value="item"></el-option>
+            </el-select> -->
+            <el-input v-model="searchForm.deparment" placeholder="请输入部门"></el-input>
+          </el-form-item>
+          <el-form-item label="资产最小价值">
+            <el-input v-model="searchForm.minvalue"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="资产编号">
+            <el-input v-model="searchForm.asset_num"></el-input>
+          </el-form-item>
+          <el-form-item label="责任人">
+            <!-- <el-select filterable clearable v-model="searchForm.person" placeholder="请选择责任人">
+              <el-option v-for="(item, index) in allPersons" :key="index" :label="item" :value="item"></el-option>
+            </el-select> -->
+            <el-input v-model="searchForm.person" placeholder="请输入责任人"></el-input>
+          </el-form-item>
+          <el-form-item label="资产最大价值">
+            <el-input v-model="searchForm.maxvalue" ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="资产标签号">
+            <el-input v-model="searchForm.tag_num"></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="父资产名称">
+            <el-input v-model="searchForm.parent_name"></el-input>
+          </el-form-item> -->
+          <el-form-item label="启用日期">
+            <el-date-picker v-model="searchForm.start_time" type="daterange" placeholder="选择领用日期范围"></el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
     
+      <el-row class="text-right">
+        <el-button type="primary" @click="accurateSearch()">筛选</el-button>
+      </el-row>
+    </el-form>
     <el-row class="padding-10">
       <el-table
         border
@@ -29,20 +76,20 @@
         @select="selectData"
         @select-all="selectAll">
         <el-table-column type="selection" width="50" ></el-table-column>
-        <el-table-column prop="name" label="设备名称" width="250"></el-table-column>
-        <el-table-column prop="asset_num" label="资产编号"></el-table-column>
-        <el-table-column prop="location" label="设备位置"></el-table-column>
-        <el-table-column prop="print_status" label="打印状态"></el-table-column>
-        <el-table-column prop="epc" label="epc编码 "></el-table-column>
-        <el-table-column prop="deparment" label="部门 "></el-table-column>
+        <el-table-column prop="name" label="设备名称" width="150"></el-table-column>
+        <el-table-column prop="asset_num" label="资产编号" width="150"></el-table-column>
+        <el-table-column prop="print_status" label="打印状态" width="150"></el-table-column>
+          <el-table-column prop="print_command" label="编码"></el-table-column>
       </el-table>
     </el-row>
     <el-row class="padding-10 text-right">
       <el-pagination
         @current-change="handleChange"
         :current-page="page"
+        @size-change="handleSizeChange"
+        :page-sizes="[10, 50, 100, 200, 400, 600, 800, 1000]"
         :page-size="pagesize"
-        layout="total, prev, pager, next"
+        layout="total, sizes, prev, pager, next"
         :total="total">
       </el-pagination>
     </el-row>
@@ -52,10 +99,8 @@
           <el-table-column type="index" label="序号" width="50"></el-table-column>
           <el-table-column prop="name" label="设备名称" width="250"></el-table-column>
           <el-table-column prop="asset_num" label="资产编号"></el-table-column>
-          <el-table-column prop="location" label="设备位置"></el-table-column>
           <el-table-column prop="print_status" label="打印状态"></el-table-column>
-          <el-table-column prop="epc" label="epc编码 "></el-table-column>
-          <el-table-column prop="deparment" label="部门 "></el-table-column>
+          <el-table-column prop="print_command" label="编码"></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button size="mini" icon="el-icon-delete" type="danger" @click="deleteSelection(scope.$index, scope.row.asset_id)"></el-button>
@@ -65,7 +110,7 @@
       </el-row>
       <el-row slot="footer" class="dialog-footer">
         <!-- <el-button @click="closeDialog">确定</el-button> -->
-        <el-button type="primary" @click="confirmAsset">改为待打印</el-button>
+        <el-button type="primary" @click="confirmAsset">打印</el-button>
       </el-row>
     </el-dialog>
     
@@ -91,19 +136,21 @@
 </template>
 
 <script>
+import api from '@/api'
 import {TokenAPI} from '@/request/TokenAPI'
+import moment from 'moment'
 export default {
   props: {
     printStatus: {
       type: String,
-      default: '已打印'
+      default: '打印中'
     }
   },
   data () {
     return {
       tableList: [],
       page: 1,
-      pagesize: 50,
+      pagesize: 10,
       total: 0,
       keystr: '',
       tagId: null,
@@ -116,8 +163,21 @@ export default {
       options: [],
       fileList: [],
       imgObj: {},
-      token: TokenAPI.getToken(),
-      org: TokenAPI.getOrg()
+      allPersons: [],
+      formShow: false,
+      searchForm: {
+        name: '',
+        tag_num: '',
+        parent_name: '',
+        asset_num: '',
+        deparment: '',
+        person: '',
+        minvalue: '',
+        maxvalue: '',
+        start_time: []
+      },
+      isFuzzy: false,
+      token: TokenAPI.getToken()
     }
   },
   mounted () {
@@ -139,14 +199,45 @@ export default {
         page: this.page,
         pagesize: this.pagesize,
         print_status: this.printStatus,
-        keystr: this.keystr,
-        deparment: this.org.OrgName,
-        deparment_id: this.org.OrgID
+        keystr: this.keystr
       }
       this.$request.post('/res/index/getassetlike', params).then(res => {
         let data = res.data
+        if (data.data) {
+          this.tableList = data.data
+          this.loading2 = false
+          this.total = data.count
+          this.isFuzzy = true
+          this.$nextTick(() => {
+            let rows = this.checkMapData(data.data)
+            console.log(rows)
+            rows.forEach(row => {
+              this.$refs.table.toggleRowSelection(row, true)
+            })
+          })
+        }
         this.loading2 = false
+      }, error => {
+        this.loading2 = false
+        console.log(error)
+      })
+    },
+    accurateSearch () {
+      this.page = 1
+      this.handleSearch()
+    },
+    handleSearch (isSearch) {
+      let _params = Object.assign({}, this.searchForm)
+      if (this.searchForm.start_time[0]) {
+        _params.minDate = moment(this.searchForm.start_time[0].getTime()).format('YYYY-MM-DD')
+        _params.maxDate = moment(this.searchForm.start_time[1].getTime()).format('YYYY-MM-DD')
+      }
+      _params.page = this.page
+      _params.pagesize = this.pagesize
+      _params.print_status = this.printStatus
+      api.fetchAssetList(_params).then(data => {
         if (data.data && data.data.length > 0) {
+          this.isFuzzy = false
           this.tableList = data.data
           this.loading2 = false
           this.total = data.count
@@ -159,14 +250,27 @@ export default {
           })
         }
       }, error => {
-        this.loading2 = false
         console.log(error)
+        this.loading2 = false
       })
     },
     // 改变页签
     handleChange (val) {
       this.page = val
-      this.getTableList()
+      if (this.isFuzzy) {
+        this.getTableList()
+      } else {
+        this.handleSearch()
+      }
+    },
+    handleSizeChange (val) {
+      this.page = 1
+      this.pagesize = val
+      if (this.isFuzzy) {
+        this.getTableList()
+      } else {
+        this.handleSearch()
+      }
     },
     // 选取数据变化
     selectionTableData (val) {
@@ -208,7 +312,6 @@ export default {
         arr.push(value)
       }, this.selectionsMap)
       this.selectionArr = arr
-      console.log('arr', this.selectionArr)
     },
     // 选择map
     checkMapData (data) {
@@ -281,7 +384,7 @@ export default {
         // tag_tpl_id: this.tagId npm
       }
       this.$request.post('/res/index/ChangePrintStatusAll', params).then(res => {
-      // this.$request.post('/res/index/SetPrintCommandAndStatus', params).then(res => { npm
+      // this.$request.post('/res/index/SetPrintCommandAndStatus', params).then(res => {npm
         let data = res.data
         let that = this
         if (data.ID === '1') {
@@ -306,7 +409,6 @@ export default {
     },
     // 预览
     viewAssets () {
-      console.log('view')
       this.dialogVisible = true
     },
     // 删除已选择的

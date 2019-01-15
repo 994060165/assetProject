@@ -7,10 +7,8 @@
 </template>
 
 <script>
-import store from '../../../../store/store'
-import { loginFun, loginBySystem } from '../../../../service/app'
-import { eventBus, EVENT_LOGIN } from '../../../../service/EventBus'
-import { gConfig } from '../../../../../static/data/config'
+import Vue from 'vue'
+// import { docCookies } from '../../../../static/cookie.js'
 export default {
   data () {
     return {
@@ -19,7 +17,6 @@ export default {
       errorMessage: false,
       showIdentifyingCode: false,
       showEwm: false,
-      base: gConfig.baseURL,
       codeUrl: '',
       form: {
         identityingCode: '',
@@ -29,69 +26,72 @@ export default {
     }
   },
   mounted () {
-    localStorage.setItem('loginErrorNo', '0')
-    let token = this.$route.params.authToken
-    this.translateLogin(token)
+    let cookieToken = this.$route.params.token
+    console.log(cookieToken)
+    if (cookieToken === '-1') {
+      this.loginLoading = false
+      alert('系统内未录入此邮箱用户，请与管理员联系')
+    } else {
+      this.onSubmit(cookieToken)
+    }
   },
   methods: {
-    // 转换页登陆
-    translateLogin (token) {
-      loginBySystem(token).then(res => {
-        let data = res.data
-        eventBus.$emit(EVENT_LOGIN, data)
-        store.commit('TOKEN_SET', JSON.stringify(data))
-        this.setLoginUser(JSON.stringify(data))
-        this.loginLoading = false
-        this.$router.push({
-          path: '/corpus/myOffice/1'
-        })
-        localStorage.setItem('loginshow', 'false')
-      }, error => {
-        console.log('cuowu', error)
-        this.loginLoading = false
-      })
-    },
-    onSubmit () {
-      let params = this.form
-      if (isNaN(parseInt(localStorage.getItem('loginErrorNo')))) {
-        // 使用localStorage存储登陆错误次数
-        localStorage.setItem('loginErrorNo', '0')
+    onSubmit (token) {
+      let params = {
+        token: token
+        // Password: this.$md5(this.form.userPsw)
       }
-      loginFun(params).then(data => {
-        if (data.errorCode) {
-          const self = this
-          const loginErrorNo = parseInt(localStorage.getItem('loginErrorNo')) + 1
-          if (loginErrorNo >= 3) {
-            self.showIdentifyingCode = true
-            self.refresh()
+      this.$request.post(`/sys/index/kjylogin`, params).then(res => {
+        let data = res.data
+        if (data.stats === '1') {
+          this.loginLoading = false
+          let users = data.data.userinfo
+          let userInfo
+          for (let user in users) {
+            userInfo = users[user]
           }
-          localStorage.setItem('loginErrorNo', loginErrorNo)
-          self.errorMessage = true
-          self.errorM = data.message
-          setTimeout(function () {
-            self.errorMessage = false
-            self.errorM = ''
-          }, 1000)
-          self.errorMessage = true
-          self.errorM = data.message
+          if (data.data.Roleinfo) {
+            let roleList = data.data.Roleinfo.data
+            let roleobj = {}
+            roleList.forEach(value => {
+              roleobj[value.RoleID] = value
+            })
+            let roleArr = []
+            for (let item in roleobj) {
+              roleArr.push(roleobj[item])
+            }
+            window.sessionStorage.setItem('roleList', JSON.stringify(roleArr))
+          }
+          if (data.data.Orginfo) {
+            window.sessionStorage.setItem('org', JSON.stringify(data.data.Orginfo[0]))
+          }
+          let menuList = this.duplicate(data.data.treelist)
+          window.sessionStorage.setItem('token', data.token)
+          window.sessionStorage.setItem('menu', JSON.stringify(menuList))
+          window.sessionStorage.setItem('user', JSON.stringify(userInfo))
+          Vue.prototype.$userInfo = userInfo
+          setTimeout(() => {
+            this.$router.push({
+              path: '/dashboard'
+            })
+          }, 100)
         } else {
-          eventBus.$emit(EVENT_LOGIN, data)
-          store.commit('TOKEN_SET', JSON.stringify(data))
-          this.setLoginUser(JSON.stringify(data))
-          this.$router.push({
-            path: '/corpus/myOffice/1'
-          })
-          localStorage.setItem('loginshow', 'false')
+          alert('登录失败，请与管理员联系')
+          this.errorMessage = true
+          this.errorM = data.msg
         }
-      }, error => {
-        console.log('出现错误', error)
       })
     },
-    refresh () {
-      var self = this
-      self.param = new Date().getTime()
-      self.codeUrl = self.base + '/seed/api/identifyingCode/getCode?' + self.param
-      self.identifyingCode = ''
+    duplicate (arr) {
+      let obj = {}
+      let arr2 = []
+      arr.forEach(value => {
+        obj[value.FunID] = value
+      })
+      for (let item in obj) {
+        arr2.push(obj[item])
+      }
+      return arr2
     }
   }
 }

@@ -41,7 +41,7 @@
         width="120px" :formatter="roleTypeFormatter">
       </el-table-column>
       <el-table-column label="是否启用" width="100px">
-        <template scope="scope">
+        <template slot-scope="scope">
           <div v-if="scope.row.state === 'TRUE'">是</div>
           <div v-else>否</div>
         </template>
@@ -64,7 +64,7 @@
   </el-dialog>
 </template>
 <script type="text/ecmascript-6">
-  import { queryPartStaffRolesByUserId, getNamesByValues } from '../../service/personnel'
+  import { queryPartStaffRolesByUserId } from '../../service/personnel'
   export default {
     props: {
       dialogVisible: {
@@ -144,13 +144,13 @@
                 optionValue: 'TRUE'
               })
           }
-          getNamesByValues(dictparams).then(data => {
-            let results = {}
-            for (let item of data) {
-              results[item.optionValue] = item.optionName
-            }
-            this.roleType = results
-          })
+          // getNamesByValues(dictparams).then(data => {
+          //   let results = {}
+          //   for (let item of data) {
+          //     results[item.optionValue] = item.optionName
+          //   }
+          //   this.roleType = results
+          // })
         })
       },
       // 获取类型

@@ -29,7 +29,7 @@
                   <el-table-column prop="UserEmail" label="邮箱">
                   </el-table-column>
                   <el-table-column label="操作" width="200">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                       <!-- <el-button title="查看" class="opr document_opr" @click="queryInfo(scope.row)">
                         <i class=" fa fa-search-plus "></i>
                       </el-button> -->

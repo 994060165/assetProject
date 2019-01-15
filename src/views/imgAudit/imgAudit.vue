@@ -2,8 +2,8 @@
   <div v-loading="loading">
     <el-row class="padding-10  text-right">
       <el-button @click="viewAssets" type="primary">预览({{selectSize}})</el-button>
-      <el-button @click="rejectAll()" type="primary">删除</el-button>
-      <el-button @click="confirmAsset" type="primary">确认打印</el-button>
+      <el-button @click="auditAll('驳回')" type="danger">批量回退</el-button>
+      <el-button @click="auditAll('已绑定')" type="primary">批量通过</el-button>
       <el-input 
         class="w-400"
         placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
@@ -18,35 +18,25 @@
         @select="selectData"
         @select-all="selectAll">
         <el-table-column type="selection" width="50" ></el-table-column>
-        <el-table-column prop="name" label="设备名称" width="250"></el-table-column>
-        <el-table-column prop="asset_num" label="资产编号"></el-table-column>
-        <el-table-column prop="location" label="设备位置"></el-table-column>
-        <el-table-column prop="deparment" label="部门" ></el-table-column>
-        <el-table-column prop="print_status" label="打印状态"></el-table-column>
-        <el-table-column prop="epc" label="epc编码 "></el-table-column>
-        <el-table-column label="操作" width="50" v-if="type==='1'">
-          <template slot-scope="scope">
-            <el-button
-              type="primary" 
-              icon="el-icon-edit" 
-              title="改为待打印"
-              @click="changeStatus(scope.row, '待打印')"
-              size="mini" >
-            </el-button>
-          </template>
-          
+        <el-table-column prop="name" label="设备名称" width="100"></el-table-column>
+        <el-table-column label="资产编号" width="180" prop="asset_num">
         </el-table-column>
-        <el-table-column label="操作" width="50" v-else>
+        <!-- <el-table-column prop="tag_num" label="资产编号"></el-table-column> -->
+        <el-table-column prop="location" label="设备位置"></el-table-column>
+        <!-- <el-table-column prop="parent_tag_num" label="父资产标签号"></el-table-column>
+        <el-table-column prop="parent_name" label="父资产名称"></el-table-column> -->
+        <el-table-column prop="value" label="基本当前成本 "></el-table-column>
+        <el-table-column prop="start_time" label="启用日期">
           <template slot-scope="scope">
-            <el-button
-              type="danger" 
-              icon="el-icon-delete" 
-              title="改为未打印"
-              @click="changeStatus(scope.row, '未打印')"
-              size="mini" >
-            </el-button>
+            {{scope.row.start_time | moment}}
           </template>
-          
+        </el-table-column>
+        <el-table-column prop="person" label="责任人"></el-table-column>
+        <el-table-column prop="deparment" label="部门 "></el-table-column>
+        <el-table-column width="100" label="操作">
+          <template slot-scope="scope">
+            <el-button @click="seeDetail(scope.row)" type="primary" size="small">查看</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-row>
@@ -80,38 +70,29 @@
       </el-row>
       <el-row slot="footer" class="dialog-footer">
         <!-- <el-button @click="closeDialog">确定</el-button> -->
-        <el-button type="primary" @click="confirmAsset">确认打印</el-button>
+        <!-- <el-button type="primary" @click="confirmAsset">确认打印</el-button> -->
+        <el-button @click="auditAll('驳回')" type="danger">批量回退</el-button>
+        <el-button @click="auditAll('已绑定')" type="primary">批量通过</el-button>
       </el-row>
     </el-dialog>
-    
-    <el-dialog title="选择打印模板" :visible.sync="dialogVisible2" :before-close="closeDialog2">
-      <el-row>
-        <el-select v-model="tagId">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <div>
-            <img v-if="tagId" :src="imgObj[tagId]" alt="" style="width: 200px;">
-        </div>
-      </el-row>
-      <el-row slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="putAssetStatus">确定</el-button>
-      </el-row>
-    </el-dialog>
+  <detail 
+    ref="detail"
+    :visible="visible"
+    :imgs="imgs"
+    @closeDialog="closeImgDialog">
+  </detail>
   </div>
 </template>
 
 <script>
 import {TokenAPI} from '@/request/TokenAPI'
+import detail from '@/components/asset/detail.vue'
+import api from '@/api'
 export default {
   props: {
-    printStatus: {
+    bindStatus: {
       type: String,
-      default: '待打印,补打'
+      default: '待审核'
     },
     type: {
       type: String,
@@ -136,12 +117,13 @@ export default {
       selectionArr: [],
       options: [],
       fileList: [],
-      imgObj: {}
+      imgObj: {},
+      visible: false,
+      imgs: {}
     }
   },
   mounted () {
     this.getTableList()
-    this.getTpl()
   },
   methods: {
     getTableList () {
@@ -149,7 +131,7 @@ export default {
       let params = {
         page: this.page,
         pagesize: this.pagesize,
-        print_status: this.printStatus,
+        bind_status: this.bindStatus,
         keystr: this.keystr
       }
       this.$request.post('/res/index/getassetlike', params).then(res => {
@@ -168,9 +150,33 @@ export default {
         this.loading = false
       })
     },
+    seeDetail (row) {
+      this.visible = true
+      this.$refs.detail.asset = row
+      let params = {
+        asset_id: row.asset_id,
+        asset_num: row.asset_num,
+        token: this.token
+      }
+      api.getAssetImg(params).then(data => {
+        if (data.ID === '-1') {
+          this.$message({
+            type: 'error',
+            message: `${data.msg}`
+          })
+        } else {
+          console.log(data)
+          this.imgs = data
+        }
+      })
+    },
     handleChange (val) {
       this.page = val
       this.getTableList()
+    },
+    // 关闭窗口
+    closeImgDialog () {
+      this.visible = false
     },
     // 关闭窗口
     closeDialog () {
@@ -219,35 +225,6 @@ export default {
         this.$refs.table.toggleRowSelection(row, true)
       })
     },
-    // 获取模板
-    getTpl () {
-      let params = {
-        keystr: '',
-        page: 1,
-        pagesize: 1000,
-        token: this.token
-      }
-      this.$request.post('/res/index/getTpl', params).then(res => {
-        let data = res.data
-        if (data.data) {
-          let arr = []
-          let imgObj = {}
-          data.data.forEach(value => {
-            if (value.ordertag === '1') {
-              this.tagId = value.tag_tpl_id
-            }
-            let obj = {
-              label: value.tpl_name,
-              value: value.tag_tpl_id
-            }
-            imgObj[value.tag_tpl_id] = value.img
-            arr.push(obj)
-          })
-          this.options = arr
-          this.imgObj = imgObj
-        }
-      })
-    },
     postAsset (arr) {
       let params = {
         token: this.token,
@@ -277,13 +254,13 @@ export default {
         })
       })
     },
-    rejectAll () {
+    auditAll (status) {
       let arr = []
       for (let [key, value] of this.selectionsMap) {
         console.log(key)
         let asset = {
           asset_id: value.asset_id,
-          print_status: '未打印'
+          bind_status: status
         }
         arr.push(asset)
       }
@@ -301,9 +278,9 @@ export default {
     changeAssetStatus (arr) {
       let params = {
         token: this.token,
-        print_list: JSON.stringify(arr)
+        asset_list: JSON.stringify(arr)
       }
-      this.$request.post('/res/index/ChangePrintStatusAll', params).then(res => {
+      this.$request.post('/res/index/ChangeTagStatusAll', params).then(res => {
         let data = res.data
         let that = this
         if (data.ID === '1') {
@@ -311,6 +288,7 @@ export default {
             type: 'success',
             message: `操作成功`
           })
+          this.closeDialog()
           this.selectionsMap = new Map()
           this.getTableList()
         } else {
@@ -387,6 +365,9 @@ export default {
     }
   },
   computed: {
+  },
+  components: {
+    detail
   }
 }
 </script>

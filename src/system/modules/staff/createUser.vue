@@ -255,11 +255,23 @@ export default {
             let params = Object.assign({}, this.form)
             // params.Password = this.$md5(params.Password)
             // params.repassword = this.$md5(params.repassword)
-            this.$request.post('/sys/index/regUser', params).then(res => {
-              this.afterSub(res)
-            })
+            if (this.editUser) {
+              this.changeUser(params)
+            } else {
+              this.regUser(params)
+            }
           })
         }
+      })
+    },
+    regUser (form) {
+      this.$request.post('/sys/index/regUser', form).then(res => {
+        this.afterSub(res)
+      })
+    },
+    changeUser (form) {
+      this.$request.post('/sys/index/putUser', form).then(res => {
+        this.afterSub(res)
       })
     },
     // 提交之后处理的函数

@@ -96,6 +96,7 @@ export default {
     }
   },
   mounted () {
+    // this.goEscience()
   },
   methods: {
     // 切换tab

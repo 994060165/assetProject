@@ -11,7 +11,7 @@
         <el-button size="small" type="text"><i class="el-icon-upload2 upload" @clik="submitUpload"></i>点击上传</el-button>
       </el-upload> -->
       <!-- <el-button @click="confirmAsset" type="primary">打印</el-button> npm -->
-      <el-button @click="viewAssets" type="primary">预览({{selectSize}})</el-button>
+      <el-button @click="viewAssets" type="primary">提交打印({{selectSize}})</el-button>
       <el-input 
         class="w-400"
         placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
@@ -53,9 +53,9 @@
           <el-form-item label="资产标签号">
             <el-input v-model="searchForm.tag_num"></el-input>
           </el-form-item>
-          <el-form-item label="父资产名称">
+          <!-- <el-form-item label="父资产名称">
             <el-input v-model="searchForm.parent_name"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="启用日期">
             <el-date-picker v-model="searchForm.start_time" type="daterange" placeholder="选择领用日期范围"></el-date-picker>
           </el-form-item>
@@ -76,7 +76,7 @@
         @select-all="selectAll">
         <el-table-column type="selection" width="50" ></el-table-column>
         <el-table-column prop="name" label="设备名称" width="250"></el-table-column>
-        <el-table-column prop="asset_num" label="设备标签号"></el-table-column>
+        <el-table-column prop="asset_num" label="资产编号"></el-table-column>
         <el-table-column prop="location" label="设备位置"></el-table-column>
         <el-table-column prop="print_status" label="打印状态"></el-table-column>
         <el-table-column prop="epc" label="epc编码 "></el-table-column>
@@ -99,7 +99,7 @@
         <el-table :data="selectionArr">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
           <el-table-column prop="name" label="设备名称" width="250"></el-table-column>
-          <el-table-column prop="asset_num" label="设备标签号"></el-table-column>
+          <el-table-column prop="asset_num" label="资产编号"></el-table-column>
           <el-table-column prop="location" label="设备位置"></el-table-column>
           <el-table-column prop="print_status" label="打印状态"></el-table-column>
           <el-table-column prop="epc" label="epc编码 "></el-table-column>
@@ -112,7 +112,7 @@
         </el-table>
       </el-row>
       <el-row slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">确定</el-button>
+        <!-- <el-button @click="closeDialog">确定</el-button> -->
         <el-button type="primary" @click="confirmAsset">打印</el-button>
       </el-row>
     </el-dialog>
@@ -199,13 +199,22 @@ export default {
     // 查询列表
     getTableList () {
       this.loading2 = true
+      let deparment
+      let deparmentId
+      if (this.org) {
+        deparment = this.org.OrgName
+        deparmentId = this.org.OrgID
+      } else {
+        deparment = null
+        deparmentId = null
+      }
       let params = {
         page: this.page,
         pagesize: this.pagesize,
         print_status: this.printStatus,
         keystr: this.keystr,
-        deparment: this.org.OrgName,
-        deparment_id: this.org.OrgID
+        deparment: deparment,
+        deparment_id: deparmentId
       }
       this.$request.post('/res/index/getassetlike', params).then(res => {
         let data = res.data
@@ -292,6 +301,7 @@ export default {
         let key = `${row.asset_id}`
         this.selectionsMap.delete(key)
       }
+      this.putData()
     },
     // 选取全部
     selectAll (selection) {

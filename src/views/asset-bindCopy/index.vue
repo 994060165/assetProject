@@ -31,7 +31,7 @@
             <el-input v-model="searchForm.asset_num"></el-input>
           </el-form-item>
           <el-form-item label="责任人">
-            <el-select filterable clearable v-model="searchForm.person" placeholder="请选择责任人">
+            <el-select filterable clearable v-model="searchForm.zrr_name" placeholder="请选择责任人">
               <el-option v-for="(item, index) in allPersons" :key="index" :label="item" :value="item"></el-option>
             </el-select>
           </el-form-item>
@@ -43,9 +43,9 @@
           <el-form-item label="资产标签号">
             <el-input v-model="searchForm.tag_num"></el-input>
           </el-form-item>
-          <el-form-item label="父资产名称">
+          <!-- <el-form-item label="父资产名称">
             <el-input v-model="searchForm.parent_name"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="启用日期">
             <el-date-picker v-model="searchForm.start_time" type="daterange" placeholder="选择领用日期范围"></el-date-picker>
           </el-form-item>
@@ -133,7 +133,7 @@ export default {
         parent_name: '',
         asset_num: '',
         deparment: '',
-        person: '',
+        zrr_name: '',
         minvalue: '',
         maxvalue: '',
         start_time: [],

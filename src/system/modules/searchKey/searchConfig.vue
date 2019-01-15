@@ -62,7 +62,7 @@
           align="center"
           width="180"
           label="修改对应页面">
-          <template scope="scope">
+          <template slot-scope="scope">
             <el-button type="primary" @click="changeData(scope.row, scope.$index)">修改</el-button>
           </template>
         </el-table-column>

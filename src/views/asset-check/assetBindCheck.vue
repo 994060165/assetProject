@@ -13,7 +13,7 @@
   <el-row>
     <el-table :data="allChecks" v-loading="loading" element-loading-text="数据加载中，请稍候...">
       <el-table-column prop="name" label="设备名称" width="100"></el-table-column>
-      <el-table-column prop="asset_num" label="设备标签号"></el-table-column>
+      <el-table-column prop="asset_num" label="资产编号"></el-table-column>
       <el-table-column prop="location" label="设备位置"></el-table-column>
       <el-table-column prop="deparment" label="部门"></el-table-column>
       <el-table-column prop="check_person" label="盘点人"></el-table-column>
@@ -80,10 +80,10 @@
             <el-table :data="assetList" @selection-change="handleSelectionChange" border>
               <el-table-column  width="50" type="selection"></el-table-column>
               <el-table-column prop="name" label="设备名称" width="100"></el-table-column>
-              <el-table-column prop="asset_num" label="设备标签号"></el-table-column>
+              <el-table-column prop="asset_num" label="资产编号"></el-table-column>
               <el-table-column prop="location" label="设备位置"></el-table-column>
               <!-- <el-table-column prop="parent_tag_num" label="父资产标签号" width="120"></el-table-column> -->
-              <el-table-column prop="parent_name" label="父资产名称"></el-table-column>
+              <!-- <el-table-column prop="parent_name" label="父资产名称"></el-table-column> -->
               <el-table-column prop="start_time" label="启用日期">
                 <template slot-scope="scope">
                   {{scope.row.start_time | moment}}

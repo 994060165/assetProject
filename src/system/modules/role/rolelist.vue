@@ -59,7 +59,7 @@
           width="120"
           align="center"
           label="是否启用">
-          <template scope="scope">
+          <template slot-scope="scope">
             <div v-if="scope.row.Tag === '1'" style="text-align:center;">是</div>
             <div v-else style="text-align:center;">否</div>
           </template>

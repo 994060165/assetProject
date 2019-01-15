@@ -31,6 +31,10 @@ export default {
   fetchAssetList: (params) => {
     return axios.post('/res/index/getasset', params).then(res => res.data)
   },
+  // 更新资产
+  changeAsset: params => {
+    return axios.post('/res/index/updateAssetForAdmin', params).then(res => res.data)
+  },
   /**
    * [fetchAssetList 筛选资产列表]
    * @param {[type]} payload [责任部门、责任人、领用日期范围、价值范围、任务ID、盘点标志]
@@ -61,7 +65,9 @@ export default {
   searchAssetList: (params) => {
     return axios.post(`/res/index/getassetlike`, params).then(res => res.data)
   },
-
+  searchAssetListByZRR: (params) => {
+    return axios.post(`/res/index/getassetlikeZRR`, params).then(res => res.data)
+  },
   /**
    * [getAssetLocation 获取资产设备位置变化记录]
    * @param {[type]} assetID [资产ID]

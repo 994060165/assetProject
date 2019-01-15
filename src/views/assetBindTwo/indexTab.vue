@@ -12,7 +12,7 @@
       <el-table :data="tableList" border>
         <el-table-column type="index" label="序号" width="50" ></el-table-column>
         <el-table-column prop="name" label="设备名称" width="250"></el-table-column>
-        <el-table-column prop="asset_num" label="设备标签号"></el-table-column>
+        <el-table-column prop="asset_num" label="资产编号"></el-table-column>
         <el-table-column prop="location" label="设备位置"></el-table-column>
         <el-table-column prop="deparment" label="部门" ></el-table-column>
         <el-table-column prop="print_status" label="打印状态"></el-table-column>

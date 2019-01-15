@@ -25,7 +25,11 @@ export class TokenAPI {
     return staff
   }
   static getOrg () {
-    let org = JSON.parse(sessionStorage.getItem('org'))
-    return org
+    if (sessionStorage.getItem('org')) {
+      let org = JSON.parse(sessionStorage.getItem('org'))
+      return org
+    } else {
+      return null
+    }
   }
 }

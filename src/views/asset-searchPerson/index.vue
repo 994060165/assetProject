@@ -73,8 +73,7 @@
       <el-table-column prop="deparment" label="部门 "></el-table-column>
       <el-table-column width="100" label="操作">
         <template slot-scope="scope">
-          <el-button @click="seeDetail(scope.row)" title="查看" type="success" size="mini" icon="el-icon-view" ></el-button>
-          <el-button @click="editAsset(scope.row)" title="编辑" type="primary" size="mini" icon="el-icon-edit" ></el-button>
+          <el-button @click="seeDetail(scope.row)" type="primary" size="small">查看</el-button>
         </template>
       </el-table-column>
     </template>
@@ -85,25 +84,22 @@
     :imgs="imgs"
     @closeDialog="closeDialog">
   </detail>
-  <createDialog
-  v-if="dialogVisible"
-  :dialogVisible="dialogVisible"
-  :assetData="assetData"
-  @changeAsset="changeAsset"
-  @cancel="cancel">
 
-  </createDialog>
 </div>
 </template>
 
 <script>
 import datagrid from '@/components/common/datagrid.vue'
 import detail from '@/components/asset/detail.vue'
-import createDialog from './createDialog.vue'
 import api from '@/api'
 import moment from 'moment'
-// import TokenAPI from '@/request/TokenAPI.js'
 export default {
+  computed: {
+  },
+  components: {
+    datagrid,
+    detail
+  },
   mounted () {
     this.handleEnterPageone()
   },
@@ -125,20 +121,17 @@ export default {
       },
       allPersons: [],
       isFuzzy: false,
-      imgs: {},
-      dialogVisible: false,
-      assetData: {},
-      token: window.sessionStorage.getItem('token')
-      // token: TokenAPI.getToken()
+      imgs: {}
     }
   },
   methods: {
     handleEnterPageone () {
-      api.searchAssetList(
+      api.searchAssetListByZRR(
         {
           keystr: this.keystr,
           page: 1,
-          pagesize: this.$refs.datagrid.page.pageSize
+          pagesize: this.$refs.datagrid.page.pageSize,
+          token: window.sessionStorage.getItem('token')
         }
       ).then(data => {
         this.allAssets = data.data
@@ -148,7 +141,7 @@ export default {
       })
     },
     handleEnter () {
-      api.searchAssetList(
+      api.searchAssetListByZRR(
         {
           keystr: this.keystr,
           page: this.$refs.datagrid.page.currentPage,
@@ -195,33 +188,7 @@ export default {
     },
     closeDialog () {
       this.visible = false
-    },
-    editAsset (row) {
-      this.assetData = Object.assign({}, row)
-      this.dialogVisible = true
-    },
-    changeAsset (assetForm) {
-      let params = Object.assign({token: this.token}, assetForm)
-      console.log(params)
-      api.changeAsset(params).then(data => {
-        this.$message({
-          type: 'success',
-          message: '修改成功!'
-        })
-        this.cancel()
-      })
-    },
-    cancel () {
-      this.dialogVisible = false
-      this.assetData = {}
     }
-  },
-  computed: {
-  },
-  components: {
-    datagrid,
-    detail,
-    createDialog
   }
 }
 </script>

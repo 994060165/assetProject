@@ -18,7 +18,7 @@
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
           <el-button size="mini" icon="el-icon-view" title="查看模板" type="success" @click="viewDialog(scope.row)"></el-button>
-          <el-button size="mini" icon="el-icon-edit" title="设置为模板" type="primary" @click="editDialog(scope.row)"></el-button>
+          <el-button size="mini" icon="el-icon-edit" title="设置为默认模板" type="primary" @click="editDialog(scope.row)"></el-button>
           <!-- <el-button size="mini" icon="el-icon-delete" title="删除模板" type="delete" @click="deleteDialog(scope.row)"></el-button> -->
         </template>
       </el-table-column>
@@ -136,7 +136,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: `删除失败：${data.msg}!`
+              message: `操作失败：${data.msg}!`
             })
           }
         })
