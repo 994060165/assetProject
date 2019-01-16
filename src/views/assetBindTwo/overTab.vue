@@ -65,7 +65,7 @@
       </el-row>
       <el-row slot="footer" class="dialog-footer">
         <!-- <el-button @click="closeDialog">确定</el-button> -->
-        <el-button type="primary" @click="confirmAsset">改为待打印</el-button>
+        <el-button type="primary" @click="confirmAsset" :disabled="selectSize === 0">改为待打印</el-button>
       </el-row>
     </el-dialog>
     

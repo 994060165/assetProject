@@ -59,7 +59,7 @@
                 v-model="scope.row.qyState"
                 on-text="启用"
                 off-text="停用"
-                @change="changeState(scope.row)">
+                @change="changeState(scope.row, scope.index)">
               </el-switch>
             </template>
           </el-table-column>
@@ -71,6 +71,7 @@
 
 <script type="text/ecmascript-6">
   import searchUserDialog from './configuserDialog.vue'
+  import {TokenAPI} from '@/request/TokenAPI'
   export default {
     name: 'hello',
     data () {
@@ -93,7 +94,8 @@
         roleType: {},
         sortKey: '',
         showNameDown: false,
-        showNameUp: false
+        showNameUp: false,
+        token: TokenAPI.getToken()
       }
     },
     mounted () {
@@ -155,6 +157,42 @@
       },
       // 切换启用状态
       changeState (row) {
+        if (row.qyState === true) {
+          this.addRoleToUser(row)
+        } else {
+          this.deleteRoletoUser(row)
+        }
+      },
+      deleteRoletoUser (row) {
+        let params = {
+          UserID: this.$route.params.UserID,
+          RoleID: row.RoleID,
+          token: this.token
+        }
+        this.$request.post('/sys/index/deleteRoleToUser', params).then(res => {
+          let data = res.data
+          if (data.ID === '-1') {
+            this.$message({
+              type: 'warning',
+              message: `${data.msg}`
+            })
+          } else {
+            this.$message({
+              type: 'success',
+              message: '操作成功'
+            })
+          }
+          this.getData()
+        }, err => {
+          console.log(err)
+          this.$message({
+            type: 'warning',
+            message: '操作失败'
+          })
+          this.getData()
+        })
+      },
+      addRoleToUser (row) {
         // 循环批量加角色，为了对应后台先删除再添加的逻辑
         let data = this.tableData
         let RoleIDs = ''

@@ -25,22 +25,20 @@
 
 </style>
 <script>
-// import { mapGetters } from 'vuex';
+import api from '@/api'
 export default {
-  // computed: mapGetters(['isLogined']),
   data () {
-    return {}
+    return {
+      pieData: {}
+    }
   },
   mounted () {
-    this.drawPie()
+    this.getData()
     this.drawBar()
   },
   methods: {
-    drawPie () {
-      // 基于准备好的dom，初始化echarts实例
-      let myChartPie = window.echarts.init(document.getElementById('myChart-pie'))
-      // 绘制图表
-      myChartPie.setOption({
+    changeData (dataArry) {
+      let obj = {
         title: {
           show: true,
           left: '33.5%',
@@ -75,7 +73,7 @@ export default {
           type: 'scroll',
           itemWidth: 12,
           itemHeight: 8,
-          data: ['台式机', '投影仪', '笔记本', '电脑桌', '服务器', '路由', '空调', '风扇']
+          data: []
         },
         color: ['#4284b8', '#539cbc', '#63b796', '#a8cf52', '#d5c241', '#de8f26', '#da736e', '#aa72b1'],
         series: [
@@ -104,18 +102,48 @@ export default {
               }
             },
             data: [
-              {value: 23, name: '台式机'},
-              {value: 3, name: '投影仪'},
-              {value: 6, name: '笔记本'},
-              {value: 9, name: '电脑桌'},
-              {value: 11, name: '服务器'},
-              {value: 16, name: '路由'},
-              {value: 21, name: '空调'},
-              {value: 20, name: '风扇'}
+              // {value: 23, name: '台式机'},
+              // {value: 3, name: '投影仪'},
+              // {value: 6, name: '笔记本'},
+              // {value: 9, name: '电脑桌'},
+              // {value: 11, name: '服务器'},
+              // {value: 16, name: '路由'},
+              // {value: 21, name: '空调'},
+              // {value: 20, name: '风扇'}
             ]
           }
         ]
+      }
+      let arr = []
+      let nameArr = []
+      dataArry.forEach(value => {
+        let obj = {}
+        if (value.category) {
+          obj.name = value.category
+          obj.value = value.num
+        } else {
+          obj.name = '其它'
+          obj.value = value.num
+        }
+        nameArr.push(obj.name)
+        arr.push(obj)
       })
+      obj.legend.data = nameArr
+      obj.series[0].data = arr
+      this.drawPie(obj)
+    },
+    getData () {
+      api.getReportDataToEchar().then(data => {
+        if (data.category) {
+          this.changeData(data.category)
+        }
+      })
+    },
+    drawPie (obj) {
+      // 基于准备好的dom，初始化echarts实例
+      let myChartPie = window.echarts.init(document.getElementById('myChart-pie'))
+      // 绘制图表
+      myChartPie.setOption(obj)
     },
     drawBar () {
       let myChartBar = window.echarts.init(document.getElementById('myChart-bar'))

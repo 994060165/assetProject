@@ -17,6 +17,9 @@ export default {
       params: {page, page_size}
     })
   },
+  getReportDataToEchar () {
+    return axios.post('/res/index/getReportDataToEchar').then(res => res.data)
+  },
   /**
    * [getAsset 根据asset_id查找特定资产]
    * @param {[type]} assetID [资产ID]
