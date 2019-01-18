@@ -78,6 +78,8 @@
   <detail 
     ref="detail"
     :visible="visible"
+    :assetid="assetid"
+    :assetnum="assetnum"
     :imgs="imgs"
     @closeDialog="closeImgDialog">
   </detail>
@@ -119,7 +121,9 @@ export default {
       fileList: [],
       imgObj: {},
       visible: false,
-      imgs: {}
+      imgs: {},
+      assetid: '',
+      assetnum: ''
     }
   },
   mounted () {
@@ -151,6 +155,8 @@ export default {
       })
     },
     seeDetail (row) {
+      this.assetnum = `${row.asset_num}`
+      this.assetid = `${row.asset_id}`
       this.visible = true
       this.$refs.detail.asset = row
       let params = {
@@ -158,7 +164,7 @@ export default {
         asset_num: row.asset_num,
         token: this.token
       }
-      api.getAssetImg(params).then(data => {
+      api.getAssetImgToBase64(params).then(data => {
         if (data.ID === '-1') {
           this.$message({
             type: 'error',
@@ -177,6 +183,8 @@ export default {
     // 关闭窗口
     closeImgDialog () {
       this.visible = false
+      this.assetnum = ''
+      this.assetid = ''
     },
     // 关闭窗口
     closeDialog () {

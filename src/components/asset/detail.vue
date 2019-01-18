@@ -1,6 +1,6 @@
 <template>
 <div class="asset__detail">
-  <el-dialog title="资产信息" :visible="visible" size="large" :modal="true" @open="handleOpen" @close="handleClose" :close-on-click-modal="false">
+  <el-dialog title="资产信息" :visible="visible" size="large" :modal="true" @open="getAssetImg" @close="handleClose" :close-on-click-modal="false">
     <el-row>
       <el-col :span="14">
         <p><b>资产名称</b><span>{{asset.name}}</span></p>
@@ -25,6 +25,22 @@
       <el-collapse v-model="collapseActiveName" v-if="type==='assetwls'">
         <el-collapse-item title="资产图片" name="1">
           <el-row :gutter="10">
+            <!-- <el-col :span="6">
+              <div class="text-center">标签与铭牌合照</div>
+              <img :src="`/${type}/${imgs.img_bq}`" alt="" class="w-full" @click="showImgPlus('img_bq')">
+            </el-col>
+            <el-col :span="6">
+              <div class="text-center">标签与局部合照</div>
+              <img :src="`/${type}/${imgs.img_jb}`" alt="" class="w-full" @click="showImgPlus('img_jb')">
+            </el-col>
+            <el-col :span="6">
+              <div class="text-center">资产正面整体照片</div>
+              <img :src="`/${type}/${imgs.img_zt}`" alt="" class="w-full" @click="showImgPlus('img_zt')">
+            </el-col>
+            <el-col :span="6">
+              <div class="text-center"> 其他照片</div>
+              <img :src="`/${type}/${imgs.img_qt}`" alt="" class="w-full" @click="showImgPlus('img_qt')">
+            </el-col> -->
             <el-col :span="6">
               <div class="text-center">标签与铭牌合照</div>
               <img :src="imgs.img_bq" alt="" class="w-full" @click="showImgPlus('img_bq')">
@@ -49,7 +65,7 @@
       <el-button type="primary" @click="handleClose">关 闭</el-button>
     </span>
   </el-dialog>
-  <el-dialog  title="图片详情" :visible="imgVisible" size="large" :before-close="closeImgDialog" :modal="true" >
+  <el-dialog  title="图片详情" v-if="imgVisible" :visible="imgVisible" size="large" :before-close="closeImgDialog" :modal="true" >
     
     <div class="imgDiv">
       <!-- <div style="text-align: right;">
@@ -62,7 +78,9 @@
 </template>
 
 <script>
+import {TokenAPI} from '@/request/TokenAPI'
 import { type } from '../../../static/data'
+import api from '@/api'
 export default {
   name: 'asset__detail',
   props: {
@@ -73,20 +91,52 @@ export default {
     imgs: {
       type: Object,
       default: {}
+    },
+    assetnum: {
+      type: String,
+      default: ''
+    },
+    assetid: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
+      token: TokenAPI.getToken(),
       collapseActiveName: '1',
       asset: {},
       type: type,
       imgPlus: null,
-      imgVisible: false
+      imgVisible: false,
+      assetImgs: {}
     }
+  },
+  mounted () {
+    // this.getAssetImg()
   },
   computed: {
   },
   methods: {
+    getAssetImg (img) {
+      // this.imgVisible = true
+      let params = {
+        asset_id: this.assetid,
+        asset_num: this.assetnum,
+        token: this.token
+      }
+      api.getAssetImg(params).then(data => {
+        if (data.ID === '-1') {
+          this.$message({
+            type: 'error',
+            message: `${data.msg}`
+          })
+        } else {
+          this.assetImgs = data
+          // this.imgVisible = true
+        }
+      })
+    },
     handleClose () {
       this.asset = {}
       this.collapseActiveName = '1'
@@ -98,8 +148,11 @@ export default {
       // })
     },
     showImgPlus (img) {
-      console.log('....')
-      this.imgPlus = this.imgs[img]
+      console.log(this.type)
+      console.log(this.assetImgs)
+      console.log(img)
+      this.imgPlus = `/${this.type}/${this.assetImgs[img]}`
+      // this.imgPlus = this.imgs[img]
       this.imgVisible = true
     },
     closeImgDialog () {

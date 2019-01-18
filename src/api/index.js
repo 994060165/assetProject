@@ -147,5 +147,8 @@ export default {
   },
   getAssetImg (params) {
     return axios.post(`/res/index/getAssetImg`, params).then(res => res.data)
+  },
+  getAssetImgToBase64 (params) {
+    return axios.post(`/res/index/getAssetImgToBase64`, params).then(res => res.data)
   }
 }

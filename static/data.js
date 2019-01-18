@@ -1,2 +1,2 @@
-const type = 'asset'
+const type = 'assetwls'
 export {type}
