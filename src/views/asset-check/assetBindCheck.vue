@@ -9,6 +9,7 @@
       <el-button slot="append" icon="el-icon-search" @click="handleRefresh"></el-button>
     </el-input>
     <el-button type="primary" @click="bindAsset">添加数据</el-button>
+    <el-button type="primary" @click="goBack">返回</el-button>
   </el-row>
   <el-row>
     <el-table :data="allChecks" v-loading="loading" element-loading-text="数据加载中，请稍候...">
@@ -89,7 +90,7 @@
                   {{scope.row.start_time | moment}}
                 </template>
               </el-table-column>
-              <el-table-column prop="person" label="责任人姓名"></el-table-column>
+              <el-table-column prop="zrr_name" label="责任人姓名"></el-table-column>
               <el-table-column prop="deparment" label="部门 "></el-table-column>
               <!-- <el-table-column width="100" label="操作">
                 <template slot-scope="scope">
@@ -184,6 +185,9 @@ export default {
     }
   },
   methods: {
+    goBack () {
+      this.$router.go(-1)
+    },
     // 为计划绑定资产
     bindAsset () {
       this.bindAssetVisible = true

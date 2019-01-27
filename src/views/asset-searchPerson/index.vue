@@ -27,7 +27,7 @@
           </el-form-item>
           <el-form-item label="责任人">
             <el-input v-model="searchForm.zrr_name" placeholder="请输入人员姓名"></el-input>
-            <!-- <el-select filterable clearable v-model="searchForm.person" placeholder="请选择责任人">
+            <!-- <el-select filterable clearable v-model="searchForm.zrr_name" placeholder="请选择责任人">
               <el-option v-for="(item, index) in allPersons" :key="index" :label="item" :value="item"></el-option>
             </el-select> -->
           </el-form-item>

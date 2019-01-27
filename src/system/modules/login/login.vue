@@ -8,8 +8,9 @@
               <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="账户登录" name="first">
                   <loginForm></loginForm>
-                <el-row class="padding-10 text-right">
-                  <span class="font-14 color-blue cursor-pointer" @click="getPassWord">找回密码</span>
+                <el-row class="padding-10">
+                  <span class="font-14 color-blue cursor-pointer text-left" @click="gotoEscience">科技云通行证登录</span>
+                  <span class="font-14 color-blue cursor-pointer pull-right" @click="getPassWord">找回密码</span>
                 </el-row>
                 </el-tab-pane>
                 <el-tab-pane label="注册账户" name="second">
@@ -117,6 +118,10 @@ export default {
     addCancel () {
       this.formVisible = false
       this.form = {}
+    },
+    gotoEscience () {
+      console.log('hahah')
+      window.location.href = 'https://passport.escience.cn/oauth2/authorize?response_type=code&theme=full&client_id=92658&redirect_uri=http://159.226.186.90/asset/index/escienceAuthLogin'
     },
     // 找回密码
     getPassWord () {

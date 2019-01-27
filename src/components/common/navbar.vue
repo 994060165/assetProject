@@ -42,8 +42,13 @@ export default {
   },
   methods: {
     kjylogout () {
+      let type = window.sessionStorage.getItem('loginType')
       window.sessionStorage.clear()
-      window.location.href = 'https://passport.escience.cn/logout?WebServerURL=http://159.226.186.90/asset'
+      if (type === 'login') {
+        this.$router.push('/login')
+      } else {
+        window.location.href = 'https://passport.escience.cn/logout?WebServerURL=http://159.226.186.90/asset'
+      }
     },
     logout () {
       window.sessionStorage.clear()

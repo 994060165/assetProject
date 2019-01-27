@@ -13,6 +13,7 @@ const assetPosition = r => require.ensure([], () => r(require('@/views/asset-pos
 const assetBind = r => require.ensure([], () => r(require('@/views/asset-bind/index')), 'assetBind')
 // 部门管理员用
 const assetBindTwo = r => require.ensure([], () => r(require('@/views/assetBindTwo/index')), 'assetBindTwo')
+const assetUpload = r => require.ensure([], () => r(require('@/views/assetUpload/assetUploadAlls')), 'assetUploadAlls')
 // 内部人员用
 const assetBindSuper = r => require.ensure([], () => r(require('@/views/asset-bindSuper/index')), 'assetBindSuper')
 const assetBindCheck = r => require.ensure([], () => r(require('@/views/asset-check/assetBindCheck')), 'assetBindCheck')
@@ -76,6 +77,11 @@ let route = [
         path: '/asset-check',
         name: 'asset-check',
         component: assetCheck
+      },
+      {
+        path: '/assetUpload',
+        name: 'assetUpload',
+        component: assetUpload
       },
       {
         path: '/asset-bindcheck/:planId',

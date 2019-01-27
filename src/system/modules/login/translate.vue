@@ -69,10 +69,11 @@ export default {
           window.sessionStorage.setItem('token', data.token)
           window.sessionStorage.setItem('menu', JSON.stringify(menuList))
           window.sessionStorage.setItem('user', JSON.stringify(userInfo))
+          window.sessionStorage.setItem('loginType', 'kjylogin')
           Vue.prototype.$userInfo = userInfo
           setTimeout(() => {
             this.$router.push({
-              path: '/dashboard'
+              path: '/assetSearchPerson'
             })
           }, 100)
         } else {

@@ -44,7 +44,7 @@
             <!-- <el-select filterable clearable v-model="searchForm.person" placeholder="请选择责任人">
               <el-option v-for="(item, index) in allPersons" :key="index" :label="item" :value="item"></el-option>
             </el-select> -->
-            <el-input v-model="searchForm.person" placeholder="请输入责任人"></el-input>
+            <el-input v-model="searchForm.zrr_name" placeholder="请输入责任人"></el-input>
           </el-form-item>
           <el-form-item label="资产最大价值">
             <el-input v-model="searchForm.maxvalue" ></el-input>
@@ -398,6 +398,7 @@ export default {
           })
           this.selectionsMap.clear()
           this.getTableList()
+          this.closeDialog()
           this.closeDialog2()
         } else {
           console.log(this.$message)

@@ -26,7 +26,7 @@
         </el-table-column>
         <el-table-column prop="deadline" label="截止时间"></el-table-column>
         <el-table-column prop="create_person" label="创建人"></el-table-column>
-        <el-table-column  width="100" label="操作">
+        <el-table-column  width="120" label="操作">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-view" title="查看计划" size="mini" @click="toAddBind(scope.row.plan_id)"></el-button>
             <el-button
@@ -36,6 +36,10 @@
               size="mini" 
               v-if="scope.row.exeResult === '未盘点'"
               @click="changeStatus(scope.row)"></el-button>
+
+
+            <el-button type="danger" icon="el-icon-delete" title="删除计划" size="mini" @click="deletePlan(scope.row.plan_id)"></el-button>
+            
           </template>
         </el-table-column>
       </el-table>
@@ -115,6 +119,38 @@ export default {
     // 新增盘点计划
     addPlan () {
       this.insertVisible = true
+    },
+    deletePlan (id) {
+      this.$confirm('删除盘点计划（同时删除盘点计划下面的所有资产信息）?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = {
+          token: window.sessionStorage.getItem('token'),
+          plan_id: id
+        }
+        this.$request.post(`/res/index/deletechecksplan`, params).then(res => {
+          let data = res.data
+          if (data.ID === '-1') {
+            this.$message({
+              type: 'error',
+              message: `操作失败！${data.msg}`
+            })
+          } else {
+            this.$message({
+              type: 'success',
+              message: '操作成功!'
+            })
+            this.handleRefresh()
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消删除!'
+        })
+      })
     },
     toAddBind (id) {
       this.$router.push({path: `/asset-bindcheck/${id}`})

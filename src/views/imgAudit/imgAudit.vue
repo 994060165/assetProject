@@ -31,7 +31,7 @@
             {{scope.row.start_time | moment}}
           </template>
         </el-table-column>
-        <el-table-column prop="person" label="责任人"></el-table-column>
+        <el-table-column prop="zrr_name" label="责任人"></el-table-column>
         <el-table-column prop="deparment" label="部门 "></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">

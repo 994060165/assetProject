@@ -44,6 +44,14 @@ export default {
         {
           title: 'assetTpl',
           name: '打印模板'
+        },
+        {
+          title: 'assetUpload',
+          name: '资产导入'
+        },
+        {
+          title: 'assetSearchPerson',
+          name: '个人资产查询'
         }
       )
       for (let i = 0; i < menu.length; i++) {

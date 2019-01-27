@@ -1,3 +1,4 @@
+var webpack = require('webpack')
 var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
@@ -29,6 +30,15 @@ module.exports = {
       '@excel': resolve('src/modules/od/service')
     }
   },
+  // 添加代码
+  plugins: [
+    new webpack.ProvidePlugin({
+    $: "jquery",
+    jQuery: "jquery",
+    jquery: "jquery",
+    "window.jQuery": "jquery"
+    })
+  ],
   module: {
     rules: [
       {

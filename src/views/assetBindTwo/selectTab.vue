@@ -41,7 +41,7 @@
             <el-input v-model="searchForm.asset_num"></el-input>
           </el-form-item>
           <el-form-item label="责任人">
-            <el-select filterable clearable v-model="searchForm.person" placeholder="请选择责任人">
+            <el-select filterable clearable v-model="searchForm.zrr_name" placeholder="请选择责任人">
               <el-option v-for="(item, index) in allPersons" :key="index" :label="item" :value="item"></el-option>
             </el-select>
           </el-form-item>
@@ -410,6 +410,7 @@ export default {
           })
           this.selectionsMap.clear()
           this.getTableList()
+          this.closeDialog()
           this.closeDialog2()
         } else {
           console.log(this.$message)
