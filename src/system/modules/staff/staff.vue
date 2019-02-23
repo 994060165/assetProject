@@ -73,8 +73,8 @@
 		</el-row>
     <el-row class="padding-10 white-bg">
       <el-col :span="8">
-        <el-checkbox v-model="checked" v-on:change="toogleSelection()"></el-checkbox>
-        <el-button type="danger" @click="batchRemove(sels)" :disabled="this.sels.length===0">批量删除</el-button>
+        <!-- <el-checkbox v-model="checked" v-on:change="toogleSelection()"></el-checkbox>
+        <el-button type="danger" @click="batchRemove(sels)" :disabled="this.sels.length===0">批量删除</el-button> -->
       </el-col>
       <el-col :span="12" class="pull-right text-right">
         <el-pagination
@@ -314,16 +314,44 @@
         this.staffForm = Object.assign({}, index)
       },
 //      删除
-      deleteByIds (index) {
-        let deleteInfo = index
-        let deleteId = [ deleteInfo.id ]
-        deleteByIds(deleteId).then(data => {
-          this.$message('删除成功')
-          setTimeout(() => {
+      deleteByIds (row) {
+        // let deleteInfo = row
+        // let deleteId = [ deleteInfo.UserID ]
+        let params = {
+          token: this.token,
+          UserID: row.UserID
+        }
+        this.$request.post(`/sys/index/deleteUser`, params).then(res => {
+          let data = res.data
+          if (data.ID !== '-1') {
+            this.$message({
+              type: 'success',
+              message: '删除成功'
+            })
             this.getDictList()
-          }, 500)
+          } else {
+            this.$message({
+              type: 'error',
+              message: '删除失败'
+            })
+          }
+        }, () => {
+          this.$message({
+            type: 'error',
+            message: '删除失败'
+          })
         })
       },
+      // deleteByIds (index) {
+      //   let deleteInfo = index
+      //   let deleteId = [ deleteInfo.id ]
+      //   deleteByIds(deleteId).then(data => {
+      //     this.$message('删除成功')
+      //     setTimeout(() => {
+      //       this.getDictList()
+      //     }, 500)
+      //   })
+      // },
 //      取消
       resetForm (formName) {
         this.dialogFormVisible = false

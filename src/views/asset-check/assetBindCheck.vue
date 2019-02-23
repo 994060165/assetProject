@@ -2,6 +2,8 @@
 <div class="asset-check">
   <el-row class="padding-10  text-right">
       
+    <el-button type="primary" @click="outputCheckRepot" class="pull-left">导出Word</el-button>
+    <el-button type="primary" @click="exportAssetToExcel" class="pull-left">导出Excel</el-button>
     <el-input 
       class="w-400"
       placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
@@ -123,6 +125,7 @@
 
 <script>
 import datagrid from '@/components/common/datagrid.vue'
+import { type } from '../../../static/data'
 import api from '@/api'
 // import moment from 'moment'
 export default {
@@ -135,6 +138,7 @@ export default {
   },
   data () {
     return {
+      type: type,
       loading: false,
       planId: '',
       allChecks: [],
@@ -187,6 +191,54 @@ export default {
   methods: {
     goBack () {
       this.$router.go(-1)
+    },
+    downloadFile (fileName, filePath) {
+      const a = document.createElement('a')
+      a.setAttribute('download', fileName)
+      a.setAttribute('href', filePath)
+      a.click()
+    },
+    // 导出盘点结果
+    outputCheckRepot () {
+      let params = {
+        token: window.sessionStorage.getItem('token'),
+        plan_id: this.planId
+      }
+      api.getPlanWord(params).then(data => {
+        if (data.ID === '-1') {
+          this.$message({
+            type: 'error',
+            message: `${data.message}`
+          })
+        } else {
+          let splitPath = data.filepath.split('\\')
+          console.log(splitPath)
+          let path = `${window.location.origin}/${type}/Public/CheckReport/${splitPath[2]}`
+          console.log(path)
+          this.downloadFile('盘点结果word', path)
+        }
+      })
+    },
+    // 导出盘点结果excel
+    exportAssetToExcel () {
+      let params = {
+        token: window.sessionStorage.getItem('token'),
+        plan_id: this.planId
+      }
+      api.exportAssetToExcel(params).then(data => {
+        if (data.ID === '-1') {
+          this.$message({
+            type: 'error',
+            message: `${data.message}`
+          })
+        } else {
+          let splitPath = data.filepath.split('\\')
+          console.log(splitPath)
+          let path = `${window.location.origin}/${type}/Public/CheckReport/${splitPath[2]}`
+          console.log(path)
+          this.downloadFile('盘点结果excel', path)
+        }
+      })
     },
     // 为计划绑定资产
     bindAsset () {

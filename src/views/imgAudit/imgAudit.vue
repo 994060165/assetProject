@@ -136,7 +136,8 @@ export default {
         page: this.page,
         pagesize: this.pagesize,
         bind_status: this.bindStatus,
-        keystr: this.keystr
+        keystr: this.keystr,
+        token: this.token
       }
       this.$request.post('/res/index/getassetlike', params).then(res => {
         let data = res.data
@@ -291,7 +292,10 @@ export default {
       this.$request.post('/res/index/ChangeTagStatusAll', params).then(res => {
         let data = res.data
         let that = this
-        if (data.ID === '1') {
+        if (data.ID === '-1') {
+          console.log(this.$message)
+          that.$message(`${data.msg}`)
+        } else {
           this.$message({
             type: 'success',
             message: `操作成功`
@@ -299,9 +303,6 @@ export default {
           this.closeDialog()
           this.selectionsMap = new Map()
           this.getTableList()
-        } else {
-          console.log(this.$message)
-          that.$message(`${data.msg}`)
         }
       }, err => {
         console.log(err)

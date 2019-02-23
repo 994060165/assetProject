@@ -121,17 +121,30 @@ const router = new VueRouter({
   routes: allRoute
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (!store.getters.loggedIn && to.path !== '/login') {
-//     next({
-//       path: '/login',
-//       query: {
-//         redirect: to.fullPath
-//       }
-//     })
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  // let bol = true
+  console.log('to', to)
+  console.log(window.sessionStorage.getItem('token'))
+  let token = window.sessionStorage.getItem('token')
+  if (token) {
+    next()
+  } else if (!token) {
+    if (to.path === '/login' || to.path === '/admin/login' || to.name === 'translate') {
+      next()
+    } else {
+      next({
+        path: `/login`
+      })
+    }
+  }
+  // let token = window.sessionStorage.getItem('token')
+  // if (token) {
+  //   next()
+  // } else {
+  //   next({
+  //     path: '/login'
+  //   })
+  // }
+})
 
 export default router

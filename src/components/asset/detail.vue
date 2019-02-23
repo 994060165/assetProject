@@ -120,9 +120,10 @@ export default {
   methods: {
     getAssetImg (img) {
       // this.imgVisible = true
+      console.log(this.asset)
       let params = {
-        asset_id: this.assetid,
-        asset_num: this.assetnum,
+        asset_id: this.asset.asset_id,
+        asset_num: this.asset.asset_num,
         token: this.token
       }
       api.getAssetImg(params).then(data => {

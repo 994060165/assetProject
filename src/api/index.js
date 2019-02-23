@@ -117,6 +117,20 @@ export default {
   getPlanAssteList: params => {
     return axios.post(`/res/index/getchecksplanDetailV2`, params).then(res => res.data)
   },
+   /**
+   * [getPlanWord 查找盘点任务列表]
+   * @param  {[finished]} payload [是否已完成]
+   */
+  getPlanWord: params => {
+    return axios.post(`/res/index/outputCheckRepot`, params).then(res => res.data)
+  },
+    /**
+   * [getPlanWord 查找盘点任务列表]
+   * @param  {[finished]} payload [是否已完成]
+   */
+  exportAssetToExcel: params => {
+    return axios.post(`/res/index/exportAssetToExcel`, params).then(res => res.data)
+  },
   /**
    * putcheckdetailAll
    * 盘点计划资产列表录入
