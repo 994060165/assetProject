@@ -10,7 +10,7 @@
       </el-select>
       <el-input 
         class="w-400"
-        placeholder="请输入资产名称/品牌/标签号/型号/责任部门/责任人"
+        placeholder="请输入计划名称"
         v-model="keystr" @keyup.enter.native="handleRefresh">
         <el-button slot="append" icon="el-icon-search" @click="handleRefresh"></el-button>
       </el-input>

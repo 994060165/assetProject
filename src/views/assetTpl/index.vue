@@ -1,7 +1,11 @@
 <template>
 <div class="asset-tpl">
   <el-row class="padding-10 text-right">
-    <el-input class="w-200" v-model="keystr"></el-input>
+    <el-input 
+      class="w-200"
+      v-model="keystr" @keyup.enter.native="restSearch">
+      <el-button slot="append" icon="el-icon-search" @click="restSearch"></el-button>
+    </el-input>
     <!-- <el-button @click="addTemplate" type="primary">新增模板</el-button> -->
   </el-row>
   <el-row class="padding-10">
@@ -69,6 +73,10 @@ export default {
     this.formData = this.initForm()
   },
   methods: {
+    restSearch () {
+      this.page = 1
+      this.getTableList()
+    },
     // 获取列表数据
     getTableList () {
       let params = {

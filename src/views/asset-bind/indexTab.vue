@@ -2,11 +2,11 @@
   <div v-loading="loading">
     <el-row class="padding-10  text-right">
       <el-button @click="viewAssets" type="primary">预览({{selectSize}})</el-button>
-      <el-button @click="rejectAll()" type="primary">删除</el-button>
-      <el-button @click="confirmAsset" type="primary">确认打印</el-button>
+      <el-button :disabled="selectionArr.length === 0" @click="rejectAll()" type="primary">删除</el-button>
+      <el-button :disabled="selectionArr.length === 0" @click="confirmAsset" type="primary">确认打印</el-button>
       <el-input 
         class="w-400"
-        placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
+        placeholder="请输入资产名称/资产编码/责任部门/责任人"
         v-model="keystr" @keyup.enter.native="getTableList">
         <el-button slot="append" icon="el-icon-search" @click="getTableList"></el-button>
       </el-input>

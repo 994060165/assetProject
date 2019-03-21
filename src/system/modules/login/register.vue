@@ -254,7 +254,11 @@ export default {
             // params.repassword = this.$md5(params.repassword)
             this.$request.post('/sys/index/regUser', params).then(res => {
               this.afterSub(res)
+            }, () => {
+              this.formLoading = false
             })
+          }, () => {
+            this.formLoading = false
           })
         }
       })

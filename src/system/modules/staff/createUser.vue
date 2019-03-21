@@ -247,11 +247,11 @@ export default {
   methods: {
     // 提交注册信息
     sysAddSubmit () {
+      this.formLoading = true
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
-            this.formLoading = true
-            console.log(this.form)
+            this.formLoading = false
             let params = Object.assign({}, this.form)
             // params.Password = this.$md5(params.Password)
             // params.repassword = this.$md5(params.repassword)
@@ -260,6 +260,8 @@ export default {
             } else {
               this.regUser(params)
             }
+          }, () => {
+            this.formLoading = false
           })
         }
       })

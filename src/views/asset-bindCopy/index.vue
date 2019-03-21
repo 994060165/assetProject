@@ -55,7 +55,7 @@
     <template slot="action">
       <!-- <el-button :disabled="disabledButton" type="primary" icon="plus" @click="$refs.bind.asset = multipleSelection">资产绑定</el-button> -->
       <el-input 
-        placeholder="请输入资产名称/品牌/标签号/型号/责任部门/责任人" 
+        placeholder="请输入资产名称/资产编码/责任部门/责任人"
         icon="search" v-model="keyword" @keyup.enter.native="handleEnter"
         >
         <el-button slot="append" icon="el-icon-search" @click="handleEnter"></el-button>

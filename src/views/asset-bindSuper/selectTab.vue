@@ -14,7 +14,7 @@
       <el-button @click="viewAssets" type="primary">提交打印({{selectSize}})</el-button>
       <el-input 
         class="w-400"
-        placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
+        placeholder="请输入资产名称/资产编码/责任部门/责任人"
         v-model="keystr" @keyup.enter.native="getTable">
         <el-button slot="append" icon="el-icon-search" @click="getTable"></el-button>
       </el-input>
@@ -114,7 +114,7 @@
       </el-row>
       <el-row slot="footer" class="dialog-footer">
         <!-- <el-button @click="closeDialog">确定</el-button> -->
-        <el-button type="primary" @click="confirmAsset">打印</el-button>
+        <el-button type="primary"  :disabled="selectSize === 0" @click="confirmAsset">打印</el-button>
       </el-row>
     </el-dialog>
     
@@ -240,7 +240,7 @@ export default {
       _params.pagesize = this.pagesize
       _params.print_status = this.printStatus
       api.fetchAssetList(_params).then(data => {
-        if (data.data && data.data.length > 0) {
+        if (data.data) {
           this.isFuzzy = false
           this.tableList = data.data
           this.loading2 = false

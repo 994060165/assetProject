@@ -50,7 +50,7 @@
     </template>
     <template slot="action">
       <el-input 
-        placeholder="请输入资产名称/品牌/标签号/型号/责任部门/责任人"
+        placeholder="请输入资产名称/资产编码/责任部门/责任人"
         v-model="keystr" @keyup.enter.native="handleEnterPageone">
         <el-button slot="append" icon="el-icon-search" @click="handleEnterPageone"></el-button>
       </el-input>
@@ -120,7 +120,7 @@ export default {
         deparment: '',
         zrr_name: '',
         minvalue: '',
-        maxvalue: '',
+        maxvalue: 1000000,
         start_time: []
       },
       allPersons: [],

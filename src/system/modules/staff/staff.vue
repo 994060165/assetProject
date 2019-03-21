@@ -3,13 +3,13 @@
     <el-row class="padding-10 white-bg">
       <el-col :span="8">
         <el-button type="primary" @click="create">新建</el-button>
-        <el-button @click="batchRemove(sels)">删除</el-button>
+        <!-- <el-button @click="batchRemove(sels)">删除</el-button> -->
         <el-button @click="refresh">刷新</el-button>
       </el-col>
       <el-col :span="8" class="pull-right">
-        <el-input placeholder="搜索" v-model="queryKey" @keyup.enter.native="searchUsers">
+        <el-input placeholder="搜索" v-model="queryKey" @keyup.enter.native="searchUserButton">
           <template slot="append">
-            <el-button slot="append" icon="el-icon-search" @click="searchUsers"></el-button>
+            <el-button slot="append" icon="el-icon-search" @click="searchUserButton"></el-button>
           </template>
         </el-input>
       </el-col>
@@ -23,11 +23,11 @@
 				align="center"
 				@selection-change="handleSelectionChange"
         v-loading="loading2">
-				<el-table-column
+				<!-- <el-table-column
 					type="selection"
 					align="center"
 					width="55">
-				</el-table-column>
+				</el-table-column> -->
         <el-table-column type="index" width="100" label="序号">
         </el-table-column>
 				<el-table-column
@@ -80,7 +80,7 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
+          :current-page.sync="page"
           :page-size="pageSize"
           :small="true"
           layout="total, prev, pager, next, jumper"
@@ -120,6 +120,7 @@
 </template>
 
 <script>
+  import {TokenAPI} from '@/request/TokenAPI'
   import { deleteByIds } from '../../service/personnel'
   import createUser from './createUser'
   import roleDialog from './roleDialog'
@@ -160,7 +161,8 @@
         checked: false,
         listLoading: false,
         tableData: [],
-        sels: []
+        sels: [],
+        token: TokenAPI.getToken()
       }
     },
     mounted () {
@@ -177,7 +179,6 @@
       },
       // 获取人员信息
       getDictList () {
-        this.queryKey = ''
         this.searchUsers()
       },
       // 是否显示输入框
@@ -190,7 +191,14 @@
       },
       // 刷新
       refresh () {
+        this.page = 1
+        this.queryKey = ''
         this.getDictList()
+      },
+      // 刷新
+      searchUserButton () {
+        this.page = 1
+        this.searchUsers()
       },
       // 创建
       create () {
@@ -202,13 +210,13 @@
         this.tableTitle = '创建新用户'
       },
       // 删除
-      deleteDicts (index) {
+      deleteDicts (row) {
         this.$confirm('人员对应的登录、角色、机构关联信息将一并删除，是否确认删除？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.deleteByIds(index)
+          this.deleteByIds(row)
         }).catch(() => {
           this.$message({
             type: 'info',

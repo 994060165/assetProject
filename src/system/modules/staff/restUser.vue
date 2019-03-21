@@ -78,14 +78,19 @@ export default {
   methods: {
     // 提交注册信息
     sysAddSubmit () {
+      this.formLoading = true
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
-            this.formLoading = true
+            this.formLoading = false
             let params = Object.assign({}, this.form)
             this.$request.post('/sys/index/ResetPassword', params).then(res => {
               this.afterSub(res)
+            }, () => {
+              this.formLoading = false
             })
+          }, () => {
+            this.formLoading = false
           })
         }
       })

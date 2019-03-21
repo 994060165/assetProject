@@ -8,7 +8,7 @@
             <input @change="changeFiles"  type="file">
           </el-row> -->
           <el-row class="p-b-10">
-              <a class="padding-5 el-button--success" style="text-decoration: none;border-radius: 3px;" href="/asset/Public/assets导入模板.xlsx" download="下载模板">下载模板</a>
+              <a class="padding-5 el-button--success" style="text-decoration: none;border-radius: 3px;" :href="`/${type}/Public/assets导入模板.xlsx`" download="下载模板">下载模板</a>
           </el-row>
           <el-row>请选择您要上传的文件：</el-row>
             <el-upload class="upload-demo" ref="upload" 
@@ -38,6 +38,7 @@
 <script>
 import axios from 'axios'
 import {TokenAPI} from '@/request/TokenAPI'
+import { type } from '../../../static/data'
 import $ from 'jquery'
 export default {
   data () {
@@ -57,7 +58,8 @@ export default {
         authorname: '',
         createrName: ''
       },
-      token: TokenAPI.getToken()
+      token: TokenAPI.getToken(),
+      type: type
     }
   },
   watch: {
@@ -112,7 +114,7 @@ export default {
         let formData = this.formData
         let that = this
         $.ajax({
-          url: '/asset/res/index/uploadAsset',
+          url: `/${type}/res/index/uploadAsset`,
           type: 'post',
           processData: false,
           contentType: false,
@@ -138,6 +140,12 @@ export default {
                 message: `上传成功!插入表中${data.savaRows}条。`
               })
             }
+          },
+          error: function (resData) {
+            that.$message({
+              type: 'error',
+              message: `服务器错误，上传失败！`
+            })
           }
         })
       }

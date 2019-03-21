@@ -14,7 +14,7 @@
       <!-- <el-button @click="viewAssets" type="primary">提交打印({{selectSize}})</el-button> -->
       <el-input 
         class="w-400"
-        placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
+        placeholder="请输入资产名称/资产编码/责任部门/责任人"
         v-model="keystr" @keyup.enter.native="getTable">
         <el-button slot="append" icon="el-icon-search" @click="getTable"></el-button>
       </el-input>
@@ -80,6 +80,18 @@
         <el-table-column prop="asset_num" label="资产编号" width="150"></el-table-column>
         <el-table-column prop="print_status" label="打印状态" width="150"></el-table-column>
           <el-table-column prop="print_command" label="编码"></el-table-column>
+          <el-table-column label="操作" width="50">
+          <template slot-scope="scope">
+            <el-button
+              type="danger" 
+              icon="el-icon-delete" 
+              title="改为未打印"
+              @click="changeStatus(scope.row, '未打印')"
+              size="mini" >
+            </el-button>
+          </template>
+          
+        </el-table-column>
       </el-table>
     </el-row>
     <el-row class="padding-10 text-right">
@@ -252,6 +264,42 @@ export default {
       }, error => {
         console.log(error)
         this.loading2 = false
+      })
+    },
+    changeStatus (row, str) {
+      let arr = []
+      let asset = {
+        asset_id: row.asset_id,
+        print_status: str
+      }
+      arr.push(asset)
+      this.changeAssetStatus(arr)
+    },
+    changeAssetStatus (arr) {
+      let params = {
+        token: this.token,
+        print_list: JSON.stringify(arr)
+      }
+      this.$request.post('/res/index/ChangePrintStatusAll', params).then(res => {
+        let data = res.data
+        let that = this
+        if (data.ID === '1') {
+          this.$message({
+            type: 'success',
+            message: `操作成功`
+          })
+          this.selectionsMap = new Map()
+          this.getTableList()
+        } else {
+          console.log(this.$message)
+          that.$message(`${data.msg}`)
+        }
+      }, err => {
+        console.log(err)
+        this.$message({
+          type: 'error',
+          message: `操作失败！`
+        })
       })
     },
     // 改变页签

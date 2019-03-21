@@ -6,7 +6,7 @@
       <el-button @click="auditAll('已绑定')" type="primary">批量通过</el-button>
       <el-input 
         class="w-400"
-        placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
+        placeholder="请输入资产名称/资产编码/责任部门/责任人"
         v-model="keystr" @keyup.enter.native="getTableList">
         <el-button slot="append" icon="el-icon-search" @click="getTableList"></el-button>
       </el-input>

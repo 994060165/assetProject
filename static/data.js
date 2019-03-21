@@ -1,3 +1,4 @@
-const type = 'assetwls'
-// const type = 'asset'
+// const type = 'assetwls'
+// const type = 'assetgcs'
+const type = 'asset'
 export {type}

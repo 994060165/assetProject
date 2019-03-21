@@ -6,7 +6,7 @@
     <el-button type="primary" @click="exportAssetToExcel" class="pull-left">导出Excel</el-button>
     <el-input 
       class="w-400"
-      placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
+      placeholder="请输入资产名称/资产编码/责任部门/责任人"
       v-model="keystr" @keyup.enter.native="handleRefresh">
       <el-button slot="append" icon="el-icon-search" @click="handleRefresh"></el-button>
     </el-input>
@@ -59,7 +59,7 @@
       <el-row  class="padding-10 text-right">
          <el-input 
           class="w-400"
-          placeholder="请输入资产名称/品牌/标签号/型号/责任部门"
+          placeholder="请输入资产名称/资产编码/责任部门/责任人"
           v-model="assetkeystr" @keyup.enter.native="getAddAssetList">
           <el-button slot="append" icon="el-icon-search" @click="getAddAssetList"></el-button>
         </el-input>
@@ -102,16 +102,16 @@
             </el-table>
           </el-row>
           <el-row class="padding-10 text-right">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="assetsPage"
-              :page-sizes="[100, 200, 300, 400]"
-              :page-size="assetsPagesize"
-              layout="total, sizes, prev, pager, next"
-              :total="assetsTotal">
-            </el-pagination>
-          </el-row>
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="assetsPage"
+                :page-sizes="[20, 50, 100, 200]"
+                :page-size="assetsPagesize"
+                layout="total, sizes, prev, pager, next"
+                :total="assetsTotal">
+              </el-pagination>
+            </el-row>
         </div>
       </div>
       <el-row class="padding-10 text-right">
@@ -153,7 +153,7 @@ export default {
       pageSize: 10,
       total: 0,
       assetsPage: 1,
-      assetsPagesize: 100,
+      assetsPagesize: 20,
       assetsTotal: 0,
       assetkeystr: '',
       assetsSelections: [],
@@ -213,7 +213,7 @@ export default {
         } else {
           let splitPath = data.filepath.split('\\')
           console.log(splitPath)
-          let path = `${window.location.origin}/${type}/Public/CheckReport/${splitPath[2]}`
+          let path = `${window.location.origin}/${type}/public/CheckReport/${splitPath[2]}`
           console.log(path)
           this.downloadFile('盘点结果word', path)
         }
@@ -232,9 +232,10 @@ export default {
             message: `${data.message}`
           })
         } else {
-          let splitPath = data.filepath.split('\\')
-          console.log(splitPath)
-          let path = `${window.location.origin}/${type}/Public/CheckReport/${splitPath[2]}`
+          // let splitPath = data.filepath.split('\\')
+          // console.log(splitPath)
+          // let path = `${window.location.origin}/${type}/public/CheckReport/${splitPath[2]}.excel`
+          let path = `${window.location.origin}/${type}/${data}`
           console.log(path)
           this.downloadFile('盘点结果excel', path)
         }
@@ -392,6 +393,7 @@ export default {
             type: 'success',
             message: '删除成功'
           })
+          this.handleRefresh()
         } else {
           this.$message({
             type: 'error',
