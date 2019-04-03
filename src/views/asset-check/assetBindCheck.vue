@@ -196,7 +196,10 @@ export default {
       const a = document.createElement('a')
       a.setAttribute('download', fileName)
       a.setAttribute('href', filePath)
+      document.body.appendChild(a)
+      a.style.display = 'none'
       a.click()
+      // window.open(filePath)
     },
     // 导出盘点结果
     outputCheckRepot () {

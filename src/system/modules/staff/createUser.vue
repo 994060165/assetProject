@@ -247,9 +247,9 @@ export default {
   methods: {
     // 提交注册信息
     sysAddSubmit () {
-      this.formLoading = true
       this.$refs.form.validate((valid) => {
         if (valid) {
+          this.formLoading = true
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.formLoading = false
             let params = Object.assign({}, this.form)
@@ -281,18 +281,25 @@ export default {
       let data = res.data
       if (data.ID !== '-1') {
         this.$message({
-          message: '注册成功',
+          message: '操作成功',
           type: 'success'
         })
         this.formLoading = false
         this.$refs['form'].resetFields()
-        this.addCancel()
+        this.addSuccess()
       } else {
         this.$message({
-          message: `非常抱歉，注册失败！${data.msg}`,
+          message: `非常抱歉，操作失败！${data.msg}`,
           type: 'error'
         })
       }
+    },
+    addSuccess () {
+      this.formLoading = false
+      this.$refs['form'].resetFields()
+      this.$nextTick(() => {
+        this.$emit('addSuccess')
+      })
     },
     addCancel () {
       this.formLoading = false

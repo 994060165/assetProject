@@ -95,7 +95,8 @@
         :formVisible = "dialogFormVisible"
         v-if="dialogFormVisible"
         :tableTitle="tableTitle"
-        @addCancel = "resetForm">
+        @addCancel = "resetForm"
+        @addSuccess="addSuccess">
       </createUser>
     </el-row>
     <el-row>
@@ -207,6 +208,7 @@
         this.modifyDisable = true
         this.createDisable = false
         this.dialogFormVisible = true
+        this.staffForm = {}
         this.tableTitle = '创建新用户'
       },
       // 删除
@@ -364,6 +366,11 @@
       resetForm (formName) {
         this.dialogFormVisible = false
         this.staffForm = {}
+      },
+      addSuccess () {
+        this.dialogFormVisible = false
+        this.staffForm = {}
+        this.searchUsers()
       },
       // 取消重置密码
       restUserCancle () {
